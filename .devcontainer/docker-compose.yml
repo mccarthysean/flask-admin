@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  flask_admin_coloured:
+    # image: ubuntu:bionic
+    volumes:
+      # Mount the root folder that contains .git
+      - ..:/workspace
+    build:
+      # context: where should docker-compose look for the Dockerfile?
+      # i.e. either a path to a directory containing a Dockerfile, or a url to a git repository
+      context: ..
+      dockerfile: Dockerfile.dev
+    environment:
+      - FLASK_CONFIG=development
+      - FLASK_ENV=development
+      # - FLASK_DEBUG=1 # VS Code overwrites this to 0 anyway when it starts a debugging session...
+    # env_file: 
+    #   - ../.env
+    # Forwards port 0.0.0.0:6000 from the Docker host (e.g. Windows desktop) to the dev environment container's port 5000
+    ports:
+      - 0.0.0.0:6000:5000
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity 

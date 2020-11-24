@@ -1,0 +1,27 @@
+{% extends admin_base_template %}
+<!-- % extends 'admin/base.html' % -->
+
+
+<!-- Sean added the below IJACK favicon icon -->
+{% block head %}
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+<style>
+  body {
+    /* If using Bootstrap4, use 90px. For Bootstrap3, use 10px */
+    padding-top: 10px;
+  }
+</style>
+{% endblock %}
+
+<!-- Sean added the below CSS stylesheet for flask-admin -->
+{% block head_css %}
+  {{ super() }}
+  <link href="{{ url_for('static', filename='css/styles_sean.css') }}" rel="stylesheet">
+{% endblock %}
+
+<!-- Sean added the below IJACK logo to the nav-bar -->
+{% block brand %}
+<a class="navbar-brand" href="/" style="padding-top: 10px; padding-bottom: 10px;">
+    <img src="{{ url_for('static', filename='img/ijack-logo.png') }}" height="34px" width="auto">
+</a>
+{% endblock %}

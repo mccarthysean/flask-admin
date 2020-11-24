@@ -1,0 +1,433 @@
+:root {
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  /* The fixed nav-bar will cover up my content if I don't add padding to the body section beneath it */
+  body {
+    position: relative;
+    min-height: 100vh;
+    /* 100% of viewport height */
+    padding-top: 71px;
+    /* height of fixed navbar */
+    color: #5a5a5a;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  #content-wrap {
+    padding-bottom: 20rem;
+    /* Footer height of 18rem plus a bit more for padding */
+  }
+  
+  footer {
+    /* This padding is for the background black colour */
+    padding-top: 20px;
+    position: absolute;
+    bottom: 0;
+    height: 18rem;
+    width: 100%;
+    margin-top: 30px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    text-align: left;
+  }
+  
+  .logo {
+    width: 126px;
+    height: 57px;
+    display: block;
+    max-width: 100%;
+    border: 0;
+    line-height: 100%;
+    outline: 0;
+    -ms-interpolation-mode: bicubic;
+    padding-bottom: 15px;
+  }
+  
+  /* Carousel base class on the homepage */
+  .carousel {
+    margin-bottom: 1rem;
+  }
+  
+  .hero-image {
+    display: inline-block;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.9));
+  }
+  
+  .hero-image img {
+    position: relative;
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
+  .hero-image h1 {
+    color: #c1d72e;
+    font-size: clamp(1rem, 5vw, 4rem);
+    line-height: 100%;
+  }
+  
+  .hero-image h3 {
+    font-size: 3vw;
+    line-height: 100%;
+  }
+  
+  .hero-image p {
+    font-size: 2.5vw;
+    line-height: 100%;
+    margin-bottom: 0.25rem;
+  }
+  
+  /* This offsets the "contact us" anchor by 250px, to account for the fixed nav-bar at the top */
+  a.anchor {
+    display: block;
+    position: relative;
+    top: -300px;
+    visibility: hidden;
+  }
+  
+  .featurette-divider {
+    /* Space out the Bootstrap <hr> more */
+    margin: 2rem 0;
+  }
+  
+  /* Just make the nav-bar background darker than the default Bootstrap background colour */
+  .bg-dark-ijack {
+    /* background-color: rgb(5, 10, 15); */
+    background-color: #0c1316;
+    /* border-color: #E7E7E7; */
+  }
+  
+  .text-ijack-green {
+    /* Define your own color in your CSS */
+    color: #c1d72e !important;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .text-ijack-green:hover {
+    /* Define your own color in your CSS */
+    color: #c1d72e !important;
+    /* background-color: #313131; */
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  /* For the button on the nav-bar */
+  .btn-outline-ijack-green {
+    color: rgba(255, 255, 255, .5);
+    background-color: transparent;
+    background-image: none;
+    border-color: rgba(255, 255, 255, .5);
+  }
+  
+  .btn-outline-ijack-green:hover {
+    color: #c1d72e;
+    background-color: #313131;
+    background-image: none;
+    border-color: #c1d72e;
+  }
+  
+  .btn-outline-ijack-green:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(192, 215, 46, .2);
+  }
+  
+  /* IJACK mods to Bootstrap's navbar-dark */
+  .navbar-dark-ijack .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .navbar-dark-ijack .navbar-nav .nav-link:hover,
+  .navbar-dark-ijack .navbar-nav .nav-link:focus {
+    color: #c1d72e;
+    /* color: rgba(255, 255, 255, 0.75); */
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .navbar-dark-ijack .navbar-nav .show>.nav-link,
+  .navbar-dark-ijack .navbar-nav .active>.nav-link,
+  .navbar-dark-ijack .navbar-nav .nav-link.show,
+  .navbar-dark-ijack .navbar-nav .nav-link.active {
+    color: #c1d72e;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .navbar-dark-ijack .navbar-toggler {
+    color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar-dark-ijack .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+  
+  .navbar-dark-ijack .navbar-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .navbar-dark-ijack .navbar-text a {
+    /* color: #fff; */
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .navbar-dark-ijack .navbar-text a:hover,
+  .navbar-dark-ijack .navbar-text a:focus {
+    color: #c1d72e;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .breadcrumb {
+    background-color: #0c1316 !important;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  footer h5 {
+    color: #717174;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #717174;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  footer p {
+    color: #717174;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  footer .copy-message {
+    font-size: 11px;
+    clear: both;
+    margin-top: 20px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  footer .social-icons {
+    font-size: 32px;
+    line-height: 32px;
+    margin-top: 5px;
+  }
+  
+  footer .social-icons a {
+    color: #717174;
+  }
+  
+  footer .social-icons a:hover {
+    color: #c1d72e;
+    text-decoration: none;
+  }
+  
+  /* For the non-layout pages */
+  .page-content {
+    padding-top: 20px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content h1 {
+    font-weight: 900;
+    font-size: 28px;
+    text-transform: uppercase;
+    color: #0c1316;
+    /* margin: 25px 0 15px 0;  */
+    margin-bottom: 15px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content h2 {
+    font-weight: 900;
+    font-size: 22px;
+    text-transform: uppercase;
+    color: #0c1316;
+    margin: 25px 0 15px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content h3 {
+    font-weight: 900;
+    font-size: 22px;
+    margin: 30px 0 10px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content h4 {
+    font-size: 20px;
+    line-height: 1.6;
+    font-weight: 300;
+    /* text-transform: uppercase; */
+    color: #0c1316;
+    margin: 0 0 15px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content h5 {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1;
+    margin: 5px 0 15px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content p {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: #0c1316;
+    margin: 0 0 15px 0;
+    /* text-align: justify; */
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content li {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: #0c1316;
+    margin: 0 0 2px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content .pageheadings {
+    margin-bottom: 40px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content .pageheadings h1 {
+    color: #c1d72e;
+    font-weight: 800;
+    font-size: 45px;
+    text-align: right;
+    line-height: 1;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .page-content .pageheadings h2 {
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.2;
+    text-align: right;
+    text-transform: uppercase;
+    color: #717174;
+    margin: 0;
+    padding-left: 95px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar h1 {
+    color: #c1d72e;
+    font-weight: 800;
+    /* font-size: 45px; */
+    /* font-size: min(4vw, 45px); */
+    /* font-size: clamp(34px, 5vw, 40px); */
+    font-size: 2.5rem;
+    text-align: left;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar .h1_brochure {
+    color: #c1d72e;
+    font-weight: 800;
+    /* font-size: clamp(22px, 3vw, 26px); */
+    font-size: 1.5rem;
+    text-align: left;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 30px 0 10px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar .btn_brochure {
+    margin-bottom: 10px;
+    text-align: left;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar h2 {
+    font-weight: 300;
+    /* font-size: 24px; */
+    font-size: 1.4rem;
+    line-height: 1.5;
+    text-align: left;
+    text-transform: uppercase;
+    color: #717174;
+    margin: 0 0 25px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar h4 {
+    font-weight: 800;
+    font-size: 16px;
+    text-align: left;
+    line-height: 1.2;
+    margin: 30px 0 10px 0;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar.blogsidebar h1 {
+    font-size: 35px;
+    line-height: 1;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar.blogsidebar h2 {
+    font-size: 16px;
+    line-height: 1.4;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar p {
+    font-size: 13px;
+    line-height: 22px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar p strong {
+    font-size: 14px;
+    font-family: 'Open Sans', Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+  
+  .sidebar .thumbnails {
+    margin: 25px 0;
+  }
+  
+  .sidebar .thumbnails a {
+    padding-right: 13px;
+    display: inline-block;
+    width: 50%;
+  }
+  
+  .sidebar .thumbnails a:last-child {
+    padding-right: 0;
+    padding-left: 13px;
+  }
+  
+  /* For flickering Bootstrap 4 tooltips on the Flask-Admin views on column label descriptions */
+  .tooltip {
+    pointer-events: none;
+  }
+  
+  /* For the inline-editing modal's text input select2 field. 
+      Otherwise it can be not wide enough to see the dropdown list items! 
+      .select2-choices is for Flask-Admin Bootstrap4 v1.5.7
+      .select2-choice is for Flask-Admin Bootstrap4 v1.5.5 */
+  .select2-choices {
+    min-width: 200px;
+  }
+  
+  .select2-choice {
+    min-width: 200px;
+  }
+  
+  /* Do the following on screens <= 576px wide */
+  @media only screen and (max-width: 576px) {
+    footer {
+      text-align: center;
+    }

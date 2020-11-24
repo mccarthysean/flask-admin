@@ -1,0 +1,16 @@
+
+FROM python:3.8-slim-buster
+
+# Configure apt and install packages
+RUN apt-get update && \
+    apt-get -y install --no-install-recommends git
+
+RUN pip3 install --upgrade pip && \
+    pip3 install poetry==1.0.10
+
+COPY poetry.lock pyproject.toml /
+RUN poetry config virtualenvs.create false && \
+  poetry install --no-interaction --no-ansi
+
+# Copy my preferred .bashrc to /root/ so that it's automatically "sourced" when the container starts
+COPY .bashrc /root/
