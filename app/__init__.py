@@ -9,8 +9,10 @@ from flask import Flask, render_template, send_from_directory, request, url_for
 import flask_admin
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 db = SQLAlchemy()
+cors = CORS()
 
 
 class MyAdminView(flask_admin.BaseView):
@@ -34,20 +36,36 @@ class AnotherAdminView(flask_admin.BaseView):
 def build_sample_db(app):
     """Populate a small db with some example entries"""
 
-    from app.models import PowerUnit
+    from app.models import PowerUnit, PowerUnitMeta
 
+    # Add some sample power units
     power_units = [200123, 200321, 200456, 200789]
     notes = ["test1", "test2", "test3", "test4"]
+
+    # Add some metadata about those power units' rows/columns
+    power_unit_ids = [1, 2, 3, 4]
+    cols = ["power_unit", "notes", "power_unit", "notes"]
+    fill_colors = ["#F9F9F9", "#717174", "#F9F9F9", "#717174"]
+    text_colors = ["#292929", "#668AAA", "#292929", "#668AAA"]
 
     with app.app_context():
         db.drop_all()
         db.create_all()
 
         for i in range(4):
+            # Add some sample power units
             pu = PowerUnit()
             pu.power_unit = power_units[i]
             pu.notes = notes[i]
             db.session.add(pu)
+
+            # Add some metadata about those power units' rows/columns
+            pum = PowerUnitMeta()
+            pum.power_unit_id = power_unit_ids[i]
+            pum.col = cols[i]
+            pum.fill_color = fill_colors[i]
+            pum.text_color = text_colors[i]
+            db.session.add(pum)
 
         db.session.commit()
 
@@ -60,7 +78,7 @@ def create_app():
     # Create flask app
     app = Flask(
         __name__, 
-        template_folder='templates',
+        # template_folder='templates',
         instance_path=str(pathlib.Path(__file__).parent.joinpath("instance")),
     )
     logging.basicConfig(level=logging.DEBUG)
@@ -75,14 +93,16 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app) # SQLAlchemy
+    cors.init_app(app)
 
     # Build a sample db on the fly
     app_dir = op.realpath(os.path.dirname(__file__))
     database_path = op.join(app_dir, app.config['DATABASE_FILE'])
-    # if os.path.exists(database_path):
-    #     os.remove(database_path)
-    if not os.path.exists(database_path):
+    if os.path.exists(database_path):
+        os.remove(database_path)
         build_sample_db(app)
+    # if not os.path.exists(database_path):
+    #     build_sample_db(app)
 
     # Flask views
     @app.route('/')
@@ -90,13 +110,13 @@ def create_app():
         return '<a href="/admin/">Click me to get to Admin!</a>'
 
     # Add the database 'models' (tables) to the admin page
-    from app.models import PowerUnit
-    from app.admin import PowerUnitView
+    from app.models import PowerUnit, PowerUnitMeta
+    from app.admin import PowerUnitView, PowerUnitMetaView
 
     # Create admin interface
     flask_admin = Admin(app, name='IJACK', template_mode='bootstrap3')
     flask_admin.add_view(PowerUnitView(PowerUnit, db.session, category='Units', name='Power Units', endpoint='admin.power_units'))
-    # flask_admin.init_app(app)
+    flask_admin.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, category='Units', name='Power Unit Meta', endpoint='admin.power_units_meta'))
 
     return app
 
