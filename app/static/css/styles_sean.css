@@ -431,3 +431,22 @@
     footer {
       text-align: center;
     }
+  }
+  .ml-5{
+    margin-left: 6rem !important;
+}
+.w-200{
+    width: 200%;
+}
+.ml-custom{
+    margin-left: 5px;
+}
+select{
+font-family: fontAwesome;
+}
+.d-flex{
+display: inline-flex !important
+}
+.mt-custom{
+margin-top: 1rem;
+}
