@@ -94,7 +94,7 @@ class PowerUnitView(MyModelView):
     )
 
 
-class PowerUnitMetaView(MyModelView):
+class PowerUnitMetaView(PowerUnitView):
     """Flask-Admin view for PowerUnitMeta model (public.power_units_meta table)"""
 
     # # Removing columns from the list view is easy, just pass a list of column names for the column_excludes_list parameter
@@ -102,30 +102,29 @@ class PowerUnitMetaView(MyModelView):
     can_create = True 
     can_edit = True
     can_delete = True # disable record deletion
-    column_display_pk = False
+    column_display_pk = True
     # column_hide_backrefs = False
 
-    column_list = ('power_unit_id', 'col', 'fill_color', 'text_color', )
-    column_default_sort = 'power_unit_id'
+    column_list = ('id', 'element', 'power_unit', 'notes', )
+    column_default_sort = 'power_unit'
     column_sortable_list = column_list
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
 
     # Control the order of the columns in the forms
-    form_columns = ('power_unit_id', 'col', 'fill_color', 'text_color', )
+    form_columns = ('element', 'power_unit', 'notes', )
+    form_choices = {'element': [('0', 'text color'), ('1', 'fill color')]}
 
     # To make columns searchable, or to use them for filtering, specify a list of column names:
     # Can't add 'customers' or 'structures' to the following list (not sure why, but maybe something to do with it being a backref/relationship field)
-    column_searchable_list = ('power_unit_id', 'col', 'fill_color', 'text_color', )
+    column_searchable_list = ('id', 'element', 'power_unit', 'notes', )
     # column_filters = ('gateway')
 
     # For a faster editing experience, enable inline editing in the list view:
     # Won't work if you add 'gateway' to this list since 'gateway' is the primary key
-    column_editable_list = ('power_unit_id', 'col', 'fill_color', 'text_color', )
+    column_editable_list = ('element', 'power_unit', 'notes', )
 
     column_labels = dict(
         power_unit="Power Unit Serial", 
         notes="Notes", 
     )
-    
-    

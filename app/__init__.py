@@ -44,7 +44,9 @@ def build_sample_db(app):
 
     # Add some metadata about those power units' rows/columns
     power_unit_ids = [1, 2, 3, 4]
-    cols = ["power_unit", "notes", "power_unit", "notes"]
+    elements = ["text color", "fill color", "text color", "fill color"]
+    notes = ["this is a fake note" for i in range(4)]
+
     fill_colors = ["#F9F9F9", "#717174", "#F9F9F9", "#717174"]
     text_colors = ["#292929", "#668AAA", "#292929", "#668AAA"]
 
@@ -61,10 +63,10 @@ def build_sample_db(app):
 
             # Add some metadata about those power units' rows/columns
             pum = PowerUnitMeta()
-            pum.power_unit_id = power_unit_ids[i]
-            pum.col = cols[i]
-            pum.fill_color = fill_colors[i]
-            pum.text_color = text_colors[i]
+            pum.id_foreign = power_unit_ids[i]
+            pum.element = elements[i]
+            pum.power_unit = power_units[i]
+            pum.notes = notes[i]
             db.session.add(pum)
 
         db.session.commit()
