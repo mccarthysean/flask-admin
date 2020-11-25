@@ -50,6 +50,16 @@ class PowerUnitView(MyModelView):
     column_display_pk = False
     # column_hide_backrefs = False
 
+    # edit_template = 'microblog_edit.html'
+    list_template = 'microblog_list.html'
+     
+    form_widget_args = {
+        'power_unit': {
+            'rows': 10,
+            'style': 'color: black'
+        }
+    }
+
     column_list = ('power_unit', 'notes', )
     column_default_sort = 'power_unit'
     column_sortable_list = column_list
