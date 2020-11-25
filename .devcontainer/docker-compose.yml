@@ -16,8 +16,8 @@ services:
       # - FLASK_DEBUG=1 # VS Code overwrites this to 0 anyway when it starts a debugging session...
     # env_file: 
     #   - ../.env
-    # Forwards port 0.0.0.0:6000 from the Docker host (e.g. Windows desktop) to the dev environment container's port 5000
+    # Forwards port 0.0.0.0:5004 from the Docker host (e.g. Windows desktop) to the dev environment container's port 5000
     ports:
-      - 0.0.0.0:6000:5000
+      - 0.0.0.0:5004:5000
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity 

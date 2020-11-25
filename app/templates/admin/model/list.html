@@ -73,7 +73,7 @@
                 {% block list_header scoped %}
                     {% if actions %}
                     <th class="list-checkbox-column">
-                        <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="{{ _gettext('Select all records') }}" />
+                        <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="{{ _gettext('Select all Sean records') }}" />
                     </th>
                     {% endif %}
                     {% block list_row_actions_header %}
@@ -141,14 +141,14 @@
                     {% if admin_view.is_editable(c) %}
                         {% set form = list_forms[get_pk_value(row)] %}
                         {% if form.csrf_token %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=form.csrf_token._value()) }}
+                            {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=form.csrf_token._value()) }}
                         {% elif csrf_token %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=csrf_token()) }}
+                            {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=csrf_token()) }}
                         {% else %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c)) }}
+                            {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c)) }}
                         {% endif %}
                     {% else %}
-                    {{ get_value(row, c) }}
+                        {{ get_value(row, c) }}
                     {% endif %}
                     </td>
                 {% endfor %}

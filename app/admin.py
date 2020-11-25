@@ -1,7 +1,7 @@
 
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
-from flask import abort, current_app, flash, redirect, request, url_for
+from flask import abort, current_app, flash, redirect, request, url_for, Markup
 
 
 class MyModelView(ModelView):
@@ -50,11 +50,24 @@ class PowerUnitView(MyModelView):
     column_display_pk = False
     # column_hide_backrefs = False
      
-    form_widget_args = {
-        'power_unit': {
-            'rows': 10,
-            'style': 'color: black'
-        }
+    # form_widget_args = {
+    #     'power_unit': {
+    #         'rows': 10,
+    #         'style': 'color: black'
+    #     }
+    # }
+
+    def _power_unit_formatter(view, context, model, name):
+        # return Markup(f'<a href="https://myijack.com">{model.power_unit}</a>')
+        m = Markup(f"""
+            <span style="background-color: yellow">
+                <strong>{model.power_unit}</strong>
+            </span>
+        """)
+        return m
+
+    column_formatters = {
+       'power_unit': _power_unit_formatter
     }
 
     column_list = ('power_unit', 'notes', )
