@@ -36,14 +36,16 @@
             "justMyCode": false
         },
 
-        // Pytest the current file
+        // Pytest all files
         {
-            "name": "Pytest Current File",
+            "name": "Pytest All Files",
             "type": "python",
             "request": "launch",
             "module": "pytest",
-            // "program": "${file}",
             "console": "integratedTerminal",
+            "args": [
+                "/workspace/app/tests/",
+            ],
         },
     ]
 }
