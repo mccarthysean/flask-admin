@@ -125,11 +125,8 @@ class PowerUnitMetaView(MyModelView):
 
     column_labels = dict(
         id_foreign="Foreign ID",
-        power_unit="Power Unit Serial", 
-        notes="Notes", 
     )
     column_descriptions = dict(
         id_foreign="The foreign ID (e.g. ID of the actual 'power_unit')",
         element="The element to style (e.g. 'text color' or 'fill color'",
-        power_unit="Name of power unit", 
     )
