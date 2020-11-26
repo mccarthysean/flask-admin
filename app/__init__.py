@@ -29,8 +29,8 @@ def seed_db(app):
     elements = ["text color", "fill color", "text color", "fill color"]
     notes = ["this is a fake note" for i in range(4)]
 
-    fill_colors = ["#F9F9F9", "#717174", "#F9F9F9", "#717174"]
-    text_colors = ["#292929", "#668AAA", "#292929", "#668AAA"]
+    pu_colors = ["#F9F9F9", "#717174", "#F9F9F9", "#717174"]
+    notes_colors = ["#292929", "#668AAA", "#292929", "#668AAA"]
 
     with app.app_context():
         db.drop_all()
@@ -47,8 +47,8 @@ def seed_db(app):
             pum = PowerUnitMeta()
             pum.id_foreign = power_unit_ids[i]
             pum.element = elements[i]
-            pum.power_unit = power_units[i]
-            pum.notes = notes[i]
+            pum.power_unit = pu_colors[i]
+            pum.notes = notes_colors[i]
             db.session.add(pum)
 
         db.session.commit()
