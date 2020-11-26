@@ -25,7 +25,7 @@ power_units_meta_model = power_units_meta_namespace.model(
 # power_units_meta_model = api_model_factory.get_entity(PowerUnitMeta.__tablename__)
 
 
-class PowerUnitMetasList(Resource):
+class PowerUnitsMetaList(Resource):
 
     @power_units_meta_namespace.expect(power_units_meta_model, validate=True)
     def post(self):
@@ -57,7 +57,7 @@ class PowerUnitMetasList(Resource):
         return PowerUnitMeta.query.all(), 200
 
 
-class PowerUnitMetas(Resource):
+class PowerUnitsMeta(Resource):
 
     @power_units_meta_namespace.marshal_with(power_units_meta_model)
     def get(self, id_):
@@ -103,5 +103,5 @@ class PowerUnitMetas(Resource):
         return response_object, 200
 
 
-power_units_meta_namespace.add_resource(PowerUnitMetasList, '')
-power_units_meta_namespace.add_resource(PowerUnitMetas, '/<int:id_>')
+power_units_meta_namespace.add_resource(PowerUnitsMetaList, '')
+power_units_meta_namespace.add_resource(PowerUnitsMeta, '/<int:id_>')

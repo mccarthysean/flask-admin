@@ -45,7 +45,7 @@ def seed_db(app):
 
             # Add some metadata about those power units' rows/columns
             pum = PowerUnitMeta()
-            pum.id_foreign = power_unit_ids[i]
+            pum.id_foreign = power_unit_ids[3 - i]
             pum.element = elements[i]
             pum.power_unit = pu_colors[i]
             pum.notes = notes_colors[i]

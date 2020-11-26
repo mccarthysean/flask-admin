@@ -47,7 +47,7 @@ class PowerUnitView(MyModelView):
     can_create = True 
     can_edit = True
     can_delete = True # disable record deletion
-    column_display_pk = False
+    column_display_pk = True
     # column_hide_backrefs = False
      
     # form_widget_args = {
@@ -69,18 +69,19 @@ class PowerUnitView(MyModelView):
        'power_unit': _power_unit_formatter
     }
 
-    column_list = ('power_unit', 'notes', )
+    column_list = ('id', 'power_unit', 'notes', )
     column_default_sort = 'power_unit'
     column_sortable_list = column_list
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
+    column_default_sort = 'id'
 
     # Control the order of the columns in the forms
     form_columns = ('power_unit', 'notes', )
 
     # To make columns searchable, or to use them for filtering, specify a list of column names:
     # Can't add 'customers' or 'structures' to the following list (not sure why, but maybe something to do with it being a backref/relationship field)
-    column_searchable_list = ('power_unit', 'notes', )
+    column_searchable_list = ('id', 'power_unit', 'notes', )
     # column_filters = ('gateway')
 
     # For a faster editing experience, enable inline editing in the list view:
@@ -90,6 +91,9 @@ class PowerUnitView(MyModelView):
     column_labels = dict(
         power_unit="Power Unit Serial", 
         notes="Notes", 
+    )
+    column_descriptions = dict(
+        power_unit="Name of the power unit",
     )
 
 
@@ -109,6 +113,7 @@ class PowerUnitMetaView(MyModelView):
     column_sortable_list = column_list
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
+    column_default_sort = 'id'
 
     # Control the order of the columns in the forms
     form_columns = ('element', 'id_foreign', 'power_unit', 'notes', )
