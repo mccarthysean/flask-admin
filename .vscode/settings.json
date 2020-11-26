@@ -1,6 +1,9 @@
 {
+    "compile-hero.disable-compile-files-on-did-save-code": false,
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.pythonPath": "/usr/local/bin/python",
-    "compile-hero.disable-compile-files-on-did-save-code": false
+    "python.unitTest.unittestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.pyTestEnabled": true,
 }

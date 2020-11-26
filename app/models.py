@@ -16,7 +16,7 @@ class PowerUnit(db.Model):
     __tablename__ = 'power_units'
     # __table_args__ = {"schema": "public"}
 
-    id = db.Column(Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True, autoincrement=True)
     power_unit = db.Column(Integer, nullable=False, unique=True)
     notes = db.Column(String)
 
