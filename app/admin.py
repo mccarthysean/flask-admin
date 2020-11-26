@@ -59,10 +59,9 @@ class PowerUnitView(MyModelView):
 
     def _power_unit_formatter(view, context, model, name):
         # return Markup(f'<a href="https://myijack.com">{model.power_unit}</a>')
+            # <span style="background-color: yellow">
         m = Markup(f"""
-            <span style="background-color: yellow">
                 <strong>{model.power_unit}</strong>
-            </span>
         """)
         return m
 
@@ -94,7 +93,7 @@ class PowerUnitView(MyModelView):
     )
 
 
-class PowerUnitMetaView(PowerUnitView):
+class PowerUnitMetaView(MyModelView):
     """Flask-Admin view for PowerUnitMeta model (public.power_units_meta table)"""
 
     # # Removing columns from the list view is easy, just pass a list of column names for the column_excludes_list parameter
@@ -105,26 +104,32 @@ class PowerUnitMetaView(PowerUnitView):
     column_display_pk = True
     # column_hide_backrefs = False
 
-    column_list = ('id', 'element', 'power_unit', 'notes', )
+    column_list = ('id', 'id_foreign', 'element', 'power_unit', 'notes', )
     column_default_sort = 'power_unit'
     column_sortable_list = column_list
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
 
     # Control the order of the columns in the forms
-    form_columns = ('element', 'power_unit', 'notes', )
+    form_columns = ('element', 'id_foreign', 'power_unit', 'notes', )
     form_choices = {'element': [('0', 'text color'), ('1', 'fill color')]}
 
     # To make columns searchable, or to use them for filtering, specify a list of column names:
     # Can't add 'customers' or 'structures' to the following list (not sure why, but maybe something to do with it being a backref/relationship field)
-    column_searchable_list = ('id', 'element', 'power_unit', 'notes', )
+    column_searchable_list = ('id', 'id_foreign', 'element', 'power_unit', 'notes', )
     # column_filters = ('gateway')
 
     # For a faster editing experience, enable inline editing in the list view:
     # Won't work if you add 'gateway' to this list since 'gateway' is the primary key
-    column_editable_list = ('element', 'power_unit', 'notes', )
+    column_editable_list = ('element', 'id_foreign', 'power_unit', 'notes', )
 
     column_labels = dict(
+        id_foreign="Foreign ID",
         power_unit="Power Unit Serial", 
         notes="Notes", 
+    )
+    column_descriptions = dict(
+        id_foreign="The foreign ID (e.g. ID of the actual 'power_unit')",
+        element="The element to style (e.g. 'text color' or 'fill color'",
+        power_unit="Name of power unit", 
     )
