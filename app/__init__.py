@@ -5,7 +5,7 @@ import pathlib
 import logging
 
 # third-party imports
-from flask import Flask, render_template, send_from_directory, request, url_for
+from flask import Flask, render_template, send_from_directory, request, url_for, jsonify
 import flask_admin
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
@@ -13,6 +13,47 @@ from flask_cors import CORS
 
 db = SQLAlchemy()
 cors = CORS()
+
+
+def seed_db(app):
+    """Populate a small db with some example entries"""
+
+    from app.models import PowerUnit, PowerUnitMeta
+
+    # Add some sample power units
+    power_units = [200123, 200321, 200456, 200789]
+    notes = ["test1", "test2", "test3", "test4"]
+
+    # Add some metadata about those power units' rows/columns
+    power_unit_ids = [1, 2, 3, 4]
+    elements = ["text color", "fill color", "text color", "fill color"]
+    notes = ["this is a fake note" for i in range(4)]
+
+    fill_colors = ["#F9F9F9", "#717174", "#F9F9F9", "#717174"]
+    text_colors = ["#292929", "#668AAA", "#292929", "#668AAA"]
+
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+
+        for i in range(4):
+            # Add some sample power units
+            pu = PowerUnit()
+            pu.power_unit = power_units[i]
+            pu.notes = notes[i]
+            db.session.add(pu)
+
+            # Add some metadata about those power units' rows/columns
+            pum = PowerUnitMeta()
+            pum.id_foreign = power_unit_ids[i]
+            pum.element = elements[i]
+            pum.power_unit = power_units[i]
+            pum.notes = notes[i]
+            db.session.add(pum)
+
+        db.session.commit()
+
+    return
 
 
 class MyAdminView(flask_admin.BaseView):
@@ -33,45 +74,6 @@ class AnotherAdminView(flask_admin.BaseView):
         return self.render('test.html')
 
 
-def build_sample_db(app):
-    """Populate a small db with some example entries"""
-
-    from app.models import PowerUnit, PowerUnitMeta
-
-    # Add some sample power units
-    power_units = [200123, 200321, 200456, 200789]
-    notes = ["test1", "test2", "test3", "test4"]
-
-    # Add some metadata about those power units' rows/columns
-    power_unit_ids = [1, 2, 3, 4]
-    cols = ["power_unit", "notes", "power_unit", "notes"]
-    fill_colors = ["#F9F9F9", "#717174", "#F9F9F9", "#717174"]
-    text_colors = ["#292929", "#668AAA", "#292929", "#668AAA"]
-
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-
-        for i in range(4):
-            # Add some sample power units
-            pu = PowerUnit()
-            pu.power_unit = power_units[i]
-            pu.notes = notes[i]
-            db.session.add(pu)
-
-            # Add some metadata about those power units' rows/columns
-            pum = PowerUnitMeta()
-            pum.power_unit_id = power_unit_ids[i]
-            pum.col = cols[i]
-            pum.fill_color = fill_colors[i]
-            pum.text_color = text_colors[i]
-            db.session.add(pum)
-
-        db.session.commit()
-
-    return
-
-
 def create_app():
     """Factory pattern"""
 
@@ -81,28 +83,29 @@ def create_app():
         # template_folder='templates',
         instance_path=str(pathlib.Path(__file__).parent.joinpath("instance")),
     )
+    app.config.from_object('app.config.DevelopmentConfig')
     logging.basicConfig(level=logging.DEBUG)
-    app.debug = True
-
-    # Create in-memory database
-    app.config['DATABASE_FILE'] = 'sample_db.sqlite'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + app.config['DATABASE_FILE']
-    app.config['SQLALCHEMY_ECHO'] = True
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = 'fdshjak54372816&*((hfjdkslahklhkjfhdsjkahfjdhskaf'
+    # app.debug = True
 
     # Initialize extensions
     db.init_app(app) # SQLAlchemy
     cors.init_app(app)
+
+    # Register api
+    from app.api import api
+    api.init_app(app)
 
     # Build a sample db on the fly
     app_dir = op.realpath(os.path.dirname(__file__))
     database_path = op.join(app_dir, app.config['DATABASE_FILE'])
     if os.path.exists(database_path):
         os.remove(database_path)
-        build_sample_db(app)
-    # if not os.path.exists(database_path):
-    #     build_sample_db(app)
+    seed_db(app)
+
+    # shell context for flask cli
+    @app.shell_context_processor
+    def ctx():
+        return {'app': app, 'db': db}
 
     # Flask views
     @app.route('/')
@@ -114,9 +117,9 @@ def create_app():
     from app.admin import PowerUnitView, PowerUnitMetaView
 
     # Create admin interface
-    flask_admin = Admin(app, name='IJACK', template_mode='bootstrap3')
-    flask_admin.add_view(PowerUnitView(PowerUnit, db.session, category='Units', name='Power Units', endpoint='admin.power_units'))
-    flask_admin.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, category='Units', name='Power Unit Meta', endpoint='admin.power_units_meta'))
+    flask_adm = Admin(app, name='IJACK', template_mode='bootstrap3')
+    flask_adm.add_view(PowerUnitView(PowerUnit, db.session, category='Units', name='Power Units', endpoint='admin.power_units'))
+    flask_adm.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, category='Units', name='Power Unit Meta', endpoint='admin.power_units_meta'))
 
     return app
 

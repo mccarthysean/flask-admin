@@ -35,5 +35,18 @@
             "jinja": true, 
             "justMyCode": false
         },
+
+        // Pytest all files
+        {
+            "name": "Pytest All Files",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "console": "integratedTerminal",
+            "args": [
+                "/workspace/app/tests/",
+                // "-v",
+            ],
+        },
     ]
 }
