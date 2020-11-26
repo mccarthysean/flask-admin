@@ -18,25 +18,33 @@
 
 
 
-from flask import Blueprint, request
-from flask_restx import Resource, Api, fields
+from flask import request
+from flask_restx import Resource, fields, Namespace
+# from flask_restplus_sqlalchemy import ApiModelFactory
 
 from app import db
 from app.models import PowerUnit
 
 
-power_units_blueprint = Blueprint('power_units', __name__)
-api = Api(power_units_blueprint)
+power_units_namespace = Namespace('power_units')
 
-power_unit_model = api.model('PowerUnit', {
-    'id': fields.Integer(readonly=True),
-    'power_unit': fields.Integer(required=True),
-    'notes': fields.String(),
-})
+
+power_units_model = power_units_namespace.model(
+    'PowerUnit', {
+        'id': fields.Integer(readonly=True),
+        'power_unit': fields.Integer(required=True),
+        'notes': fields.String(),
+    }
+)
+
+# Link Flask Rest Plus API with SQLAlchemy
+# api_model_factory = ApiModelFactory(api=power_units_namespace, db=db)
+# power_units_model = api_model_factory.get_entity(PowerUnit.__tablename__)
+
 
 class PowerUnitsList(Resource):
 
-    @api.expect(power_unit_model, validate=True)
+    @power_units_namespace.expect(power_units_model, validate=True)
     def post(self):
         post_data = request.get_json()
         power_unit = post_data.get('power_unit')
@@ -54,18 +62,18 @@ class PowerUnitsList(Resource):
         response_object['message'] = f'{power_unit} was added!'
         return response_object, 201
 
-    @api.marshal_with(power_unit_model, as_list=True)
+    @power_units_namespace.marshal_with(power_units_model, as_list=True)
     def get(self):
         return PowerUnit.query.all(), 200
 
 
 class PowerUnits(Resource):
 
-    @api.marshal_with(power_unit_model)
+    @power_units_namespace.marshal_with(power_units_model)
     def get(self, power_unit_id):
         pu = PowerUnit.query.filter_by(id=power_unit_id).first()
         if pu is None:
-            api.abort(404, f"Power unit {power_unit_id} does not exist")
+            power_units_namespace.abort(404, f"Power unit {power_unit_id} does not exist")
         
         return pu, 200
 
@@ -74,7 +82,7 @@ class PowerUnits(Resource):
         pu = PowerUnit.query.filter_by(id=power_unit_id).first()
 
         if not pu:
-            api.abort(404, f"Power unit {power_unit_id} does not exist")
+            power_units_namespace.abort(404, f"Power unit {power_unit_id} does not exist")
 
         db.session.delete(pu)
         db.session.commit()
@@ -82,7 +90,7 @@ class PowerUnits(Resource):
         response_object["message"] = f"{pu.power_unit} was removed!"
         return response_object, 200
 
-    @api.expect(power_unit_model, validate=True)
+    @power_units_namespace.expect(power_units_model, validate=True)
     def put(self, power_unit_id):
         post_data = request.get_json()
         power_unit = post_data.get("power_unit")
@@ -91,7 +99,7 @@ class PowerUnits(Resource):
 
         pu = PowerUnit.query.filter_by(id=power_unit_id).first()
         if not pu:
-            api.abort(404, f"Power unit {power_unit_id} does not exist")
+            power_units_namespace.abort(404, f"Power unit {power_unit_id} does not exist")
 
         pu.power_unit = power_unit
         pu.notes = notes
@@ -101,5 +109,5 @@ class PowerUnits(Resource):
         return response_object, 200
 
 
-api.add_resource(PowerUnitsList, '/power_units')
-api.add_resource(PowerUnits, '/power_units/<int:power_unit_id>')
+power_units_namespace.add_resource(PowerUnitsList, '')
+power_units_namespace.add_resource(PowerUnits, '/<int:power_unit_id>')

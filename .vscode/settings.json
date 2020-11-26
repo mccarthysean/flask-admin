@@ -2,6 +2,7 @@
     "compile-hero.disable-compile-files-on-did-save-code": false,
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy", "pylint_flask"],
     "python.pythonPath": "/usr/local/bin/python",
     "python.unitTest.unittestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,

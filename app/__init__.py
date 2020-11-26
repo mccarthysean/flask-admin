@@ -6,7 +6,6 @@ import logging
 
 # third-party imports
 from flask import Flask, render_template, send_from_directory, request, url_for, jsonify
-# from flask_restx import Resource, Api
 import flask_admin
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
@@ -14,7 +13,6 @@ from flask_cors import CORS
 
 db = SQLAlchemy()
 cors = CORS()
-# api = Api()
 
 
 def seed_db(app):
@@ -92,14 +90,10 @@ def create_app():
     # Initialize extensions
     db.init_app(app) # SQLAlchemy
     cors.init_app(app)
-    # api.init_app(app, version='1.0', title='IJACK MetaData API', description="For Flask-Admin views' metadata")
 
-    # register blueprints
-    from app.api.ping import ping_blueprint
-    from app.api.power_units import power_units_blueprint
-
-    app.register_blueprint(ping_blueprint)
-    app.register_blueprint(power_units_blueprint)
+    # Register api
+    from app.api import api
+    api.init_app(app)
 
     # Build a sample db on the fly
     app_dir = op.realpath(os.path.dirname(__file__))
@@ -123,9 +117,9 @@ def create_app():
     from app.admin import PowerUnitView, PowerUnitMetaView
 
     # Create admin interface
-    flask_admin = Admin(app, name='IJACK', template_mode='bootstrap3')
-    flask_admin.add_view(PowerUnitView(PowerUnit, db.session, category='Units', name='Power Units', endpoint='admin.power_units'))
-    flask_admin.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, category='Units', name='Power Unit Meta', endpoint='admin.power_units_meta'))
+    flask_adm = Admin(app, name='IJACK', template_mode='bootstrap3')
+    flask_adm.add_view(PowerUnitView(PowerUnit, db.session, category='Units', name='Power Units', endpoint='admin.power_units'))
+    flask_adm.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, category='Units', name='Power Unit Meta', endpoint='admin.power_units_meta'))
 
     return app
 
