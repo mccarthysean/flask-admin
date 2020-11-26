@@ -45,6 +45,7 @@
             "console": "integratedTerminal",
             "args": [
                 "/workspace/app/tests/",
+                // "-v",
             ],
         },
     ]

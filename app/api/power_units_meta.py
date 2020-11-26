@@ -15,7 +15,7 @@ power_units_meta_model = power_units_meta_namespace.model(
         'id': fields.Integer(readonly=True),
         'id_foreign': fields.Integer(required=True),
         'element': fields.String(required=True),
-        'power_unit': fields.Integer(required=True),
+        'power_unit': fields.String(required=True),
         'notes': fields.String(),
     }
 )
@@ -42,7 +42,11 @@ class PowerUnitMetasList(Resource):
             response_object['message'] = 'Sorry. That power unit meta already exists.'
             return response_object, 400
 
-        db.session.add(PowerUnitMeta(**cols))
+        record = PowerUnitMeta()
+        for key, value in cols.items():
+            setattr(record, key, value)
+
+        db.session.add(record)
         db.session.commit()
 
         response_object['message'] = f"{cols['id_foreign']} was added!"
@@ -95,7 +99,7 @@ class PowerUnitMetas(Resource):
 
         db.session.commit()
 
-        response_object["message"] = f"{record.id_} was updated!"
+        response_object["message"] = f"{record.id} was updated!"
         return response_object, 200
 
 

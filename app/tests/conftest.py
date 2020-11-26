@@ -4,7 +4,7 @@ import os.path as op
 import pytest
 
 from app import create_app, db
-from app.models import PowerUnit
+from app.models import PowerUnit, PowerUnitMeta
 
 
 @pytest.fixture(scope='module')
@@ -32,9 +32,21 @@ def test_database():
 
 @pytest.fixture(scope='function')
 def add_power_unit():
-    def _add_power_unit(power_unit, notes):
-        power_unit = PowerUnit(power_unit=power_unit, notes=notes)
-        db.session.add(power_unit)
+    def _inner_func(power_unit, notes):
+        record = PowerUnit(power_unit=power_unit, notes=notes)
+        db.session.add(record)
         db.session.commit()
-        return power_unit
-    return _add_power_unit
+        return record
+    return _inner_func
+
+
+@pytest.fixture(scope='function')
+def add_power_units_meta():
+    def _inner_func(**kwargs):
+        record = PowerUnitMeta()
+        for key, value in kwargs.items():
+            setattr(record, key, value)
+        db.session.add(record)
+        db.session.commit()
+        return record
+    return _inner_func
