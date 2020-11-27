@@ -28,7 +28,6 @@ from app.models import PowerUnit
 
 power_units_namespace = Namespace('power_units')
 
-
 power_units_model = power_units_namespace.model(
     'PowerUnit', {
         'id': fields.Integer(readonly=True),
