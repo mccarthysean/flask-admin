@@ -1,7 +1,30 @@
+
+
 var count = 0;
 var td_id = 0;
 var current_id;
+
+var settings = {
+        "url": "/meta_data",
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+          "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
+          "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({"id_cell":"string","element":"string","color":"string"}),
+      };
+      
+      $.ajax(settings).done(function (response) {
+        console.log(response);
+      });
+
+
 $("td").click(function () {
+        if($(this).attr("class")=="list-buttons-column" || $(this).attr("class")=="list-checkbox-column"){
+                console.log("done")
+                return;
+        }
         if (count == 0) {
                 $(".actions-nav").append(`
 <li class="d-flex">
@@ -54,12 +77,33 @@ function fillcolor1(val) {
                 "color": val.value,
                 "border-bottom": "dashed 1px " + val.value
         })
-
+        var settings = {
+                "url": "/meta_data",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                        "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
+                        "Content-Type": "application/json"
+                 },
+                "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"font","color":val.value}),
+              };
+              
+              $.ajax(settings).done(function (response) {
+                console.log(response);
+              });
 }
 
 function fillcolor2(val) {
-
-<<<<<<< HEAD
+        $("#" + current_id).css("background",val.value)
+        var settings = {
+                "url": "/meta_data",
+                "method": "POST",
+                "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"background","color":val.value}),
+              };
+              
+              $.ajax(settings).done(function (response) {
+                console.log(response);
+              });
 }
 
 var class_arr = [];
@@ -70,19 +114,19 @@ var class_arr = [];
  console.log(class_arr)
  
  class_arr.forEach(function(class_elem){
-         for(var i = 0 ;i<document.querySelectorAll("."+class_elem).length;i++){
+         var temp=0;
+         for(var i = 1 ;i<=document.querySelectorAll("."+class_elem).length-1;i++){
                  if(document.querySelectorAll("."+class_elem)[i].querySelector("a>strong")){
-                         console.log(document.querySelectorAll("."+class_elem)[i].querySelector("a>strong"))
-                         console.log(document.querySelectorAll("."+class_elem)[i].querySelector("a>strong").innerText)
-                        document.querySelectorAll("."+class_elem)[i].setAttribute("id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].querySelector("a>strong").innerText)
+                        document.querySelectorAll("."+class_elem)[i].setAttribute("data-id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].querySelector("a>strong").innerText+"_row_"+document.querySelectorAll(".elem")[temp].querySelector("a").innerText)
                  }
                  else{
-                        document.querySelectorAll("."+class_elem)[i].setAttribute("id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].innerText)
-                 }
+                         if(document.querySelectorAll(".elem")[temp].querySelector("a")) {
+                                document.querySelectorAll("."+class_elem)[i].setAttribute("data-id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].innerText+"_row_"+document.querySelectorAll(".elem")[temp].querySelector("a").innerText)
+                         }
+                         else{
+                        document.querySelectorAll("."+class_elem)[i].setAttribute("data-id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].innerText+"_row_"+document.querySelectorAll(".elem")[temp].innerText)
+                         } 
+                }
+                 temp++;
          }
  })
-=======
-        $("#" + current_id).css("background", val.value)
-
-}
->>>>>>> a6b9ec25a20a0651588af7c787faaff92e1ba850
