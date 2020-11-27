@@ -59,7 +59,6 @@ function fillcolor1(val) {
 
 function fillcolor2(val) {
 
-<<<<<<< HEAD
 }
 
 var class_arr = [];
@@ -81,8 +80,6 @@ var class_arr = [];
                  }
          }
  })
-=======
         $("#" + current_id).css("background", val.value)
 
 }
->>>>>>> a6b9ec25a20a0651588af7c787faaff92e1ba850
