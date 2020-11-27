@@ -94,7 +94,6 @@ function fillcolor1(val) {
 }
 
 function fillcolor2(val) {
-<<<<<<< HEAD
         $("#" + current_id).css("background",val.value)
         var settings = {
                 "url": "/meta_data",
@@ -105,9 +104,6 @@ function fillcolor2(val) {
               $.ajax(settings).done(function (response) {
                 console.log(response);
               });
-=======
-
->>>>>>> 3c6075ef1d6d8d2a09a20a7fa17775fc4b85a2bb
 }
 
 var class_arr = [];
