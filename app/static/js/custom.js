@@ -113,7 +113,6 @@ $.ajax({
          },
         "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"font","color":val.value}),
         success: function(data,status,xhr){
-            alert("Hurrah!");
         //     weHaveSuccess = true;
         },
         error: function(xhr, status, error){
@@ -149,7 +148,6 @@ function fillcolor2(val) {
                  },
                 "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"background","color":val.value}),
                 success: function(data,status,xhr){
-                    alert("Hurrah!");
                 //     weHaveSuccess = true;
                 },
                 error: function(xhr, status, error){
