@@ -101,7 +101,6 @@ class PowerUnitView(MyModelView):
     }
 
     column_list = ('id', 'power_unit', 'notes', )
-    column_default_sort = 'power_unit'
     column_sortable_list = column_list
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
@@ -140,7 +139,6 @@ class PowerUnitMetaView(MyModelView):
     # column_hide_backrefs = False
 
     column_list = ('id', 'id_foreign', 'element', 'power_unit', 'notes', )
-    column_default_sort = 'power_unit'
     column_sortable_list = column_list
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
@@ -165,6 +163,48 @@ class PowerUnitMetaView(MyModelView):
     column_descriptions = dict(
         id_foreign="The foreign ID (e.g. ID of the actual 'power_unit')",
         element="The element to style (e.g. 'text color' or 'fill color'",
+    )
+
+
+class MetaDataView(MyModelView):
+    """Flask-Admin view for MetaData model"""
+
+    # # Removing columns from the list view is easy, just pass a list of column names for the column_excludes_list parameter
+    # column_exclude_list = ['password_hash', ]
+    can_create = True 
+    can_edit = True
+    can_delete = True # disable record deletion
+    column_display_pk = True
+    # column_hide_backrefs = False
+
+    column_list = ('id_cell', 'element', 'color')
+    column_default_sort = 'id_cell'
+    column_sortable_list = column_list
+    can_set_page_size = True
+    page_size = 12  # the number of entries to display on the list view
+
+    # Control the order of the columns in the forms
+    form_columns = column_list
+    form_choices = {'element': [('0', 'text color'), ('1', 'fill color')]}
+
+    # To make columns searchable, or to use them for filtering, specify a list of column names:
+    # Can't add 'customers' or 'structures' to the following list (not sure why, but maybe something to do with it being a backref/relationship field)
+    column_searchable_list = column_list
+    column_filters = column_list
+
+    # For a faster editing experience, enable inline editing in the list view:
+    # Won't work if you add 'gateway' to this list since 'gateway' is the primary key
+    column_editable_list = column_list
+
+    column_labels = dict(
+        id_cell="ID Cell",
+        element="Element",
+        color="Color",
+    )
+    column_descriptions = dict(
+        id_cell="The primary key and identifier",
+        element="The element to style (e.g. 'text color' or 'fill color'",
+        color="The hex-color of the element we're styling",
     )
 
 

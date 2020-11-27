@@ -23,7 +23,7 @@ login_manager = LoginManager()
 def seed_db(app):
     """Populate a small db with some example entries"""
 
-    from app.models import PowerUnit, PowerUnitMeta
+    from app.models import PowerUnit, PowerUnitMeta, MetaData
 
     # Add some sample power units
     power_units = [200123, 200321, 200456, 200789]
@@ -55,6 +55,12 @@ def seed_db(app):
             pum.power_unit = pu_colors[i]
             pum.notes = notes_colors[i]
             db.session.add(pum)
+
+            md = MetaData()
+            md.id_cell = power_unit_ids[3 - i]
+            md.element = elements[i]
+            md.color = pu_colors[3 - i]
+            db.session.add(md)
 
         db.session.commit()
 
@@ -126,16 +132,17 @@ def create_app():
         """)
 
     # Add the database 'models' (tables) to the admin page
-    from app.models import PowerUnit, PowerUnitMeta, User
-    from app.admin import SecuredAdminIndexView, PowerUnitView, PowerUnitMetaView, UserView
+    from app.models import PowerUnit, PowerUnitMeta, User, MetaData
+    from app.admin import SecuredAdminIndexView, PowerUnitView, PowerUnitMetaView, UserView, MetaDataView
 
     # Create admin interface
     flask_adm = Admin(app, name='IJACK', template_mode='bootstrap3', 
         index_view=SecuredAdminIndexView(name='Admin', url='/admin', endpoint='admin')
     )
     flask_adm.add_view(UserView(User, db.session, name='Users', endpoint='admin.users'))
-    flask_adm.add_view(PowerUnitView(PowerUnit, db.session, category='Units', name='Power Units', endpoint='admin.power_units'))
-    flask_adm.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, category='Units', name='Power Unit Meta', endpoint='admin.power_units_meta'))
+    flask_adm.add_view(PowerUnitView(PowerUnit, db.session, name='Power Units', endpoint='admin.power_units'))
+    flask_adm.add_view(PowerUnitMetaView(PowerUnitMeta, db.session, name='Power Unit Meta', endpoint='admin.power_units_meta'))
+    flask_adm.add_view(MetaDataView(MetaData, db.session, name='Meta Data', endpoint='admin.meta_data'))
 
     return app
 
