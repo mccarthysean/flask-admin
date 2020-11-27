@@ -41,7 +41,7 @@ class MetaDataList(Resource):
 
         record = MetaData.query.filter_by(id_cell=id_cell).first()
         if record:
-            response_object['message'] = 'Sorry. That id_cell already exists.'
+            response_object['message'] = 'That record already exists.'
             return response_object, 400
 
         db.session.add(MetaData(id_cell=id_cell, element=element, color=color))
@@ -58,7 +58,7 @@ class MetaDataIndividual(Resource):
         """Returns a single record"""
         record = MetaData.query.filter_by(id_cell=id_cell).first()
         if record is None:
-            meta_data_namespace.abort(404, f"id_cell {id_cell} does not exist")
+            meta_data_namespace.abort(404, "That record does not exist")
         
         return record, 200
 
@@ -68,7 +68,7 @@ class MetaDataIndividual(Resource):
         record = MetaData.query.filter_by(id_cell=id_cell).first()
 
         if not record:
-            meta_data_namespace.abort(404, f"id_cell {id_cell} does not exist")
+            meta_data_namespace.abort(404, "That record does not exist")
 
         db.session.delete(record)
         db.session.commit()
@@ -88,10 +88,8 @@ class MetaDataIndividual(Resource):
         response_object = {}
 
         record = MetaData.query.filter_by(id_cell=id_cell).first()
-        # if not record:
-        #     meta_data_namespace.abort(404, f"id_cell {id_cell} does not exist")
-        if record:
-            response_object['message'] = 'Sorry. That id_cell already exists.'
+        if not record:
+            response_object['message'] = 'That record does not exist.'
             return response_object, 400
 
         record.id_cell = new_id_cell
