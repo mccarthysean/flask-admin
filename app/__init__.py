@@ -5,7 +5,7 @@ import pathlib
 import logging
 
 # third-party imports
-from flask import Flask, render_template, render_template_string, send_from_directory, request, url_for, jsonify
+from flask import current_app, Flask, render_template, render_template_string, send_from_directory, request, url_for, jsonify
 import flask_admin
 from flask_admin import Admin
 from flask_bcrypt import Bcrypt
@@ -56,11 +56,11 @@ def seed_db(app):
             pum.notes = notes_colors[i]
             db.session.add(pum)
 
-            md = MetaData()
-            md.id_cell = power_unit_ids[3 - i]
-            md.element = elements[i]
-            md.color = pu_colors[3 - i]
-            db.session.add(md)
+            # md = MetaData()
+            # md.id_cell = power_unit_ids[3 - i]
+            # md.element = elements[i]
+            # md.color = pu_colors[3 - i]
+            # db.session.add(md)
 
         user = User(
             name="Sean McCarthy",
@@ -137,6 +137,23 @@ def create_app():
                 <a href="/docs/">Click here to go to the API documentation</a>
             </html></body>
         """)
+
+    @app.route('/test/', methods=['GET', 'POST'])
+    def test():
+        return render_template('test.html')
+
+    @app.route('/hello/', methods=['GET', 'POST'])
+    def hello():
+        # POST request
+        if request.method == 'POST':
+            current_app.logger.debug('Incoming..')
+            current_app.logger.debug(request.get_json())  # parse as JSON
+            return 'OK', 200
+
+        # GET request
+        else:
+            message = {'greeting': 'Hello from Flask!'}
+            return message  # serialize and use JSON headers
 
     # Add the database 'models' (tables) to the admin page
     from app.models import PowerUnit, PowerUnitMeta, User, MetaData
