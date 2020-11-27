@@ -60,3 +60,23 @@ function fillcolor2(val){
 $("#"+current_id).css("background",val.value)
 
 }
+
+var class_arr = [];
+ for(var i = 2 ; i<document.querySelectorAll("th").length;i++){
+   class_arr.push(document.querySelectorAll("th")[i].getAttribute("class").split(" ")[1]);
+ }
+
+ console.log(class_arr)
+ 
+ class_arr.forEach(function(class_elem){
+         for(var i = 0 ;i<document.querySelectorAll("."+class_elem).length;i++){
+                 if(document.querySelectorAll("."+class_elem)[i].querySelector("a>strong")){
+                         console.log(document.querySelectorAll("."+class_elem)[i].querySelector("a>strong"))
+                         console.log(document.querySelectorAll("."+class_elem)[i].querySelector("a>strong").innerText)
+                        document.querySelectorAll("."+class_elem)[i].setAttribute("id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].querySelector("a>strong").innerText)
+                 }
+                 else{
+                        document.querySelectorAll("."+class_elem)[i].setAttribute("id",class_elem+"_"+document.querySelectorAll("."+class_elem)[i].innerText)
+                 }
+         }
+ })
