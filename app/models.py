@@ -61,8 +61,8 @@ create_meta_class(PowerUnit, PowerUnitMeta, 'power_units_meta')
 class MetaData(db.Model):
     __tablename__ = 'meta_data'
 
-    # id = db.Column("id", Integer, primary_key=True)
-    id_cell = db.Column(String, primary_key=True)
+    id = db.Column(Integer, primary_key=True)
+    id_cell = db.Column(String, nullable=False)
     element = db.Column(String, nullable=False)
     color = db.Column(String, nullable=False)
 

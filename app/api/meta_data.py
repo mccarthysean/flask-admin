@@ -11,7 +11,7 @@ meta_data_namespace = Namespace('meta_data')
 
 meta_data_model = meta_data_namespace.model(
     'MetaData', {
-        # 'id': fields.Integer(readonly=True),
+        'id': fields.Integer(readonly=True),
         'id_cell': fields.String(required=True),
         'element': fields.String(required=True),
         'color': fields.String(required=True),
@@ -88,15 +88,19 @@ class MetaDataIndividual(Resource):
         response_object = {}
 
         record = MetaData.query.filter_by(id_cell=id_cell).first()
-        if not record:
-            meta_data_namespace.abort(404, f"id_cell {id_cell} does not exist")
+        # if not record:
+        #     meta_data_namespace.abort(404, f"id_cell {id_cell} does not exist")
+        if record:
+            response_object['message'] = 'Sorry. That id_cell already exists.'
+            return response_object, 400
 
         record.id_cell = new_id_cell
         record.element = element
         record.color = color
         db.session.commit()
 
-        response_object["message"] = f"id_cell '{id_cell}' was updated to id_cell '{new_id_cell}', element '{element}', and color '{color}'"
+        # response_object["message"] = f"id_cell '{id_cell}' was updated to id_cell '{new_id_cell}', element '{element}', and color '{color}'"
+        response_object["message"] = "Successfully updated"
         return response_object, 200
 
 
