@@ -23,7 +23,7 @@ login_manager = LoginManager()
 def seed_db(app):
     """Populate a small db with some example entries"""
 
-    from app.models import PowerUnit, PowerUnitMeta, MetaData
+    from app.models import PowerUnit, PowerUnitMeta, MetaData, User
 
     # Add some sample power units
     power_units = [200123, 200321, 200456, 200789]
@@ -61,6 +61,13 @@ def seed_db(app):
             md.element = elements[i]
             md.color = pu_colors[3 - i]
             db.session.add(md)
+
+        user = User(
+            name="Sean McCarthy",
+            email="sean.mccarthy@hotmail.com",
+            password="test"
+        )
+        db.session.add(user)
 
         db.session.commit()
 
