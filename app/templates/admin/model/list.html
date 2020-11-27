@@ -136,7 +136,7 @@
             {% endblock %}
 
             {% for c, name in list_columns %}
-            <td class="col-{{c}}">
+            <td class="col-{{c}}" id="col-{{c}}">
                 {% if admin_view.is_editable(c) %}
                 {% set form = list_forms[get_pk_value(row)] %}
                 {% if form.csrf_token %}
