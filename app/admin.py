@@ -216,7 +216,7 @@ class UserView(MyModelView):
     can_set_page_size = True
     page_size = 12  # the number of entries to display on the list view
 
-    # # Removing columns from the list view is easy, just pass a list of column names for the column_excludes_list parameter
+    # Removing columns from the list view is easy, just pass a list of column names for the column_excludes_list parameter
     column_exclude_list = ('created_date', )
     
     column_list = ('email', 'name', )

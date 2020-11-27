@@ -193,6 +193,7 @@ class User(UserMixin, db.Model):
         """
         Generates the Auth Token
         :return: string
+        freecodecamp.org/news/structuring-a-flask-restplus-web-service-for-production-builds-c2ec676de563/#route-protection-and-authorization
         """
         try:
             payload = {
@@ -208,12 +209,43 @@ class User(UserMixin, db.Model):
         except Exception as e:
             return e
 
+    def encode_token(self, user_id, token_type):
+        """testdriven.io/courses/auth-flask-react/jwt-setup/"""
+
+        if token_type == "access":
+            seconds = current_app.config.get('ACCESS_TOKEN_EXPIRATION')
+        else:
+            seconds = current_app.config.get('REFRESH_TOKEN_EXPIRATION')
+
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(
+                days=0, seconds=seconds), # token expiration date
+            'iat': datetime.datetime.utcnow(), # (issued at): token generation date
+            'sub': user_id # the user whom it identifies
+        }
+        return jwt.encode(
+            payload,
+            current_app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
+
+    @staticmethod
+    def decode_token(token):
+        """https://testdriven.io/courses/auth-flask-react/jwt-setup/"""
+        payload = jwt.decode(
+            token, 
+            current_app.config.get('SECRET_KEY'),
+            algorithms=['HS256']
+        )
+        return payload["sub"]
+
     @staticmethod
     def decode_auth_token(auth_token):
         """
         Decodes the auth token
         :param auth_token:
         :return: integer|string
+        freecodecamp.org/news/structuring-a-flask-restplus-web-service-for-production-builds-c2ec676de563/#route-protection-and-authorization
         """
         try:
             payload = jwt.decode(

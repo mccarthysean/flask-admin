@@ -46,7 +46,7 @@
             "args": [
                 "/workspace/app/tests/",
                 // "-v",
-                // "--lf",
+                "--lf",
             ],
         },
     ]
