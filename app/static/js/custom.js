@@ -12,11 +12,29 @@ var settings = {
           "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
           "Content-Type": "application/json"
         },
-        "data": JSON.stringify({"id_cell":"string","element":"string","color":"string"}),
       };
       
       $.ajax(settings).done(function (response) {
-        console.log(response);
+              console.log(response)
+        response.forEach(function(elem){
+                if(elem.element == "font"){
+                        if(document.querySelector("td[data-id='" + elem.id_cell +"']>a")){
+                                $("td[data-id='" + elem.id_cell +"']>a").css({
+                                        "color": elem.color,
+                                        "border-bottom": "dashed 1px " + elem.color
+                                })
+                        }
+                        else{
+                                $("td[data-id='" + elem.id_cell +"']").css({
+                                "color": elem.color,
+                        })
+                    }   
+                } 
+                else{
+                        $("td[data-id='" + elem.id_cell +"']").css("background",elem.color);
+                }
+        })
+
       });
 
 
@@ -73,10 +91,17 @@ $("td").click(function () {
 })
 
 function fillcolor1(val) {
-        $("#" + current_id + ">a").css({
+        if(document.querySelector("#"+current_id+">a")){
+                $("#" + current_id + ">a").css({
+                        "color": val.value,
+                        "border-bottom": "dashed 1px " + val.value
+                })
+        }
+        else{
+        $("#" + current_id).css({
                 "color": val.value,
-                "border-bottom": "dashed 1px " + val.value
         })
+}
         var settings = {
                 "url": "/meta_data",
                 "method": "POST",
@@ -98,6 +123,11 @@ function fillcolor2(val) {
         var settings = {
                 "url": "/meta_data",
                 "method": "POST",
+                "timeout": 0,
+                "headers": {
+                        "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
+                        "Content-Type": "application/json"
+                 },
                 "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"background","color":val.value}),
               };
               
