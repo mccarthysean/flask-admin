@@ -1,7 +1,38 @@
-
+from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
 from flask import abort, current_app, flash, redirect, request, url_for, Markup
+from flask_login import current_user
+from wtforms import PasswordField
+
+from app import bcrypt
+from app.models import User
+
+
+class SecuredAdminIndexView(AdminIndexView):
+    """
+    Customized non-model (i.e. non-database-table) views, 
+    for general stuff like login and user registration
+    """
+
+    # def is_accessible(self):
+    #     """The user must be both authenticated, and an admin user to view these pages"""
+    #     return current_user.is_authenticated
+
+    # def inaccessible_callback(self, name, **kwargs):
+    #     """redirect to login page if user doesn't have access"""
+    #     return redirect(url_for('auth.login', next=request.url))
+
+    # def check_authenticated(self):
+    #     """Check if the user has permissions to view the page. Otherwise abort"""
+    #     if not current_user.is_authenticated:
+    #         return redirect(url_for('auth.login', next=request.url))
+
+    @expose('/')
+    def index(self):
+        """This is the page that's seen at https://myijack.com/admin (the default page for admins)"""
+        # self.check_authenticated()
+        return self.render('/admin/index.html')
 
 
 class MyModelView(ModelView):
@@ -57,7 +88,7 @@ class PowerUnitView(MyModelView):
     #     }
     # }
 
-    def _power_unit_formatter(view, context, model, name):
+    def _power_unit_formatter(self, view, context, model, name):
         # return Markup(f'<a href="https://myijack.com">{model.power_unit}</a>')
             # <span style="background-color: yellow">
         m = Markup(f"""
@@ -135,3 +166,62 @@ class PowerUnitMetaView(MyModelView):
         id_foreign="The foreign ID (e.g. ID of the actual 'power_unit')",
         element="The element to style (e.g. 'text color' or 'fill color'",
     )
+
+
+class UserView(MyModelView):
+    """Flask-Admin view for User model (users table)"""
+
+    # Use the /register link for creating users, so the password gets hashed
+    can_create = True
+    can_set_page_size = True
+    page_size = 12  # the number of entries to display on the list view
+
+    # # Removing columns from the list view is easy, just pass a list of column names for the column_excludes_list parameter
+    column_exclude_list = ('created_date', )
+    
+    column_list = ('email', 'name', )
+    column_sortable_list = column_list
+    column_default_sort = 'name'
+
+    # Add our own password form field - call it password2
+    form_extra_fields = {
+        'password': PasswordField('Password'),
+        'password2': PasswordField('Confirm Password'),
+    }
+
+    # Control the order of the columns in the forms
+    # form_columns = ('email', 'name', 'password', )
+    # column_editable_list = form_columns
+
+    # To make columns searchable, or to use them for filtering, specify a list of column names:
+    column_searchable_list = ('name', 'email', )
+
+    column_labels = dict(
+        email='Email',
+        # password="Hashed Password",
+    )
+    column_descriptions = dict(
+        email="Login email address that identifies the user's account",
+        # password="This is not the user's actual password. It's a secured, hashed password that cannot be used to login",
+    )
+
+    def on_model_change(self, form, model, is_created):
+        """Hash the password anytime its value changes"""
+        # model.password = bcrypt.generate_password_hash(
+        #     model.password, 
+        #     current_app.config.get("BCRYPT_LOG_ROUNDS")
+        # )
+        if form.password.data is not None:
+            model.set_password(form.password.data)
+
+    # def get_list_form(self):
+    #     """Remove the password from the edit form"""
+    #     list_class = super().get_list_form()
+    #     delattr(list_class, 'password')
+    #     return list_class
+
+    # def get_edit_form(self):
+    #     """Remove the password from the edit form"""
+    #     form_class = super().get_edit_form()
+    #     delattr(form_class, 'password')
+    #     return form_class

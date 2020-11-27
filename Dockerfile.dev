@@ -1,12 +1,29 @@
 
 FROM python:3.8-slim-buster
+# FROM node:15.3.0-buster-slim
+# FROM nikolaik/python-nodejs:python3.9-nodejs15-slim
 
 # Configure apt and install packages
-RUN apt-get update && \
-    apt-get -y install --no-install-recommends git
+RUN apt-get update && apt-get install -y git
+#     apt-get -yq install --no-install-recommends git curl gnupg ca-certificates && \
+#     curl -L https://deb.nodesource.com/setup_12.x | bash && \
+#     apt-get update -yq && \
+#     apt-get install -yq nodejs
 
 RUN pip3 install --upgrade pip && \
     pip3 install poetry==1.0.10
+
+# # set working directory
+# WORKDIR /usr/src/app
+
+# # add `/usr/src/app/node_modules/.bin` to $PATH
+# ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+# # install and cache app dependencies
+# COPY package.json .
+# COPY yarn-lock.json .
+# RUN npm ci
+# RUN npm install react-scripts@4.0.1 -g --silent
 
 COPY poetry.lock pyproject.toml /
 RUN poetry config virtualenvs.create false && \

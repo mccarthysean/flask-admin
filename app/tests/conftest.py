@@ -4,7 +4,7 @@ import os.path as op
 import pytest
 
 from app import create_app, db
-from app.models import PowerUnit, PowerUnitMeta
+from app.models import User, PowerUnit, PowerUnitMeta
 
 
 @pytest.fixture(scope='module')
@@ -50,3 +50,13 @@ def add_power_units_meta():
         db.session.commit()
         return record
     return _inner_func
+
+
+@pytest.fixture(scope='module')
+def add_user():
+    def _add_user(name, email, password):
+        user = User(name=name, email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    return _add_user
