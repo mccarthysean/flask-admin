@@ -16,7 +16,8 @@ var settings = {
       
       $.ajax(settings).done(function (response) {
               console.log(response)
-        response.forEach(function(elem){
+                 
+              response.forEach(function(elem){
                 if(elem.element == "font"){
                         if(document.querySelector("td[data-id='" + elem.id_cell +"']>a")){
                                 $("td[data-id='" + elem.id_cell +"']>a").css({
@@ -102,25 +103,43 @@ function fillcolor1(val) {
                 "color": val.value,
         })
 }
-        var settings = {
-                "url": "/meta_data",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                        "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
-                        "Content-Type": "application/json"
-                 },
-                "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"font","color":val.value}),
-              };
-              
-              $.ajax(settings).done(function (response) {
-                console.log(response);
-              });
+$.ajax({
+        "url": "/meta_data",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+                "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
+                "Content-Type": "application/json"
+         },
+        "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"font","color":val.value}),
+        success: function(data,status,xhr){
+            alert("Hurrah!");
+        //     weHaveSuccess = true;
+        },
+        error: function(xhr, status, error){
+                var settings = {
+                        "url": "/meta_data/"+$("#" + current_id).attr("data-id"),
+                        "method": "PUT",
+                        "timeout": 0,
+                        "headers": {
+                          "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
+                          "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"font","color":val.value}),
+                      };
+                      
+                      $.ajax(settings).done(function (response) {
+                        console.log(response);
+                      });
+
+        },
+        
+                   });
 }
 
 function fillcolor2(val) {
         $("#" + current_id).css("background",val.value)
-        var settings = {
+              $.ajax({
                 "url": "/meta_data",
                 "method": "POST",
                 "timeout": 0,
@@ -129,11 +148,29 @@ function fillcolor2(val) {
                         "Content-Type": "application/json"
                  },
                 "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"background","color":val.value}),
-              };
-              
-              $.ajax(settings).done(function (response) {
-                console.log(response);
-              });
+                success: function(data,status,xhr){
+                    alert("Hurrah!");
+                //     weHaveSuccess = true;
+                },
+                error: function(xhr, status, error){
+                        var settings = {
+                                "url": "/meta_data/"+$("#" + current_id).attr("data-id"),
+                                "method": "PUT",
+                                "timeout": 0,
+                                "headers": {
+                                  "Authorization": "Token 8b0f89e987a20371bd5442c0550f0e12a22bbfbf",
+                                  "Content-Type": "application/json"
+                                },
+                                "data": JSON.stringify({"id_cell":$("#" + current_id).attr("data-id"),"element":"background","color":val.value}),
+                              };
+                              
+                              $.ajax(settings).done(function (response) {
+                                console.log(response);
+                              });
+
+                },
+                
+                           });
 }
 
 var class_arr = [];
