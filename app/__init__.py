@@ -118,9 +118,9 @@ def create_app():
     # Build a sample db on the fly
     app_dir = op.realpath(os.path.dirname(__file__))
     database_path = op.join(app_dir, app.config['DATABASE_FILE'])
-    if os.path.exists(database_path):
-        os.remove(database_path)
-    seed_db(app)
+    # if os.path.exists(database_path):
+    #     os.remove(database_path)
+    #     seed_db(app)
 
     # shell context for flask cli
     @app.shell_context_processor
