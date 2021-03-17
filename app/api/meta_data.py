@@ -88,7 +88,7 @@ class MetaDataIndividual(Resource):
 
         post_data = request.get_json()
         # The new id_cell, if it needs to be changed
-        new_id_cell = post_data.get("id_cell")
+        # new_id_cell = post_data.get("id_cell")
         element = post_data.get("element")
         color = post_data.get("color")
         response_object = {}
@@ -98,7 +98,7 @@ class MetaDataIndividual(Resource):
             response_object['message'] = 'That record does not exist.'
             return response_object, 400
 
-        record.id_cell = new_id_cell
+        # record.id_cell = new_id_cell
         record.element = element
         record.color = color
         db.session.commit()

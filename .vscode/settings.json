@@ -1,5 +1,5 @@
 {
-    "compile-hero.disable-compile-files-on-did-save-code": false,
+    "compile-hero.disable-compile-files-on-did-save-code": true,
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy", "pylint_flask"],
@@ -12,4 +12,10 @@
     // "python.testing.cwd": "/workspace/app/tests/",
     // "python.testing.pytestPath": "/workspace/app/tests/",
     // "python.testing.pytestArgs": [],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false,
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
 }

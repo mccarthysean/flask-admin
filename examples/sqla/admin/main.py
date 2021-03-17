@@ -157,7 +157,7 @@ class UserAdmin(sqla.ModelView):
 class PostAdmin(sqla.ModelView):
     column_display_pk = True
     column_list = ['id', 'user', 'title', 'date', 'tags', 'background_color', 'created_at', ]
-    column_editable_list = ['background_color', ]
+    column_editable_list = ['background_color', 'user']
     column_default_sort = ('date', True)
     create_modal = True
     edit_modal = True
@@ -247,6 +247,7 @@ admin = admin.Admin(app, name='Example: SQLAlchemy', template_mode='bootstrap4')
 # Add views
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(sqla.ModelView(Tag, db.session))
+# The "Post" model gets added in the overriddent __init__(self, Post, session)
 admin.add_view(PostAdmin(db.session))
 admin.add_view(TreeView(Tree, db.session, category="Other"))
 admin.add_sub_category(name="Links", parent_name="Other")

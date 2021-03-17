@@ -82,7 +82,8 @@ class Post(db.Model):
     date = db.Column(db.Date)
 
     # some sqlalchemy_utils data types (see https://sqlalchemy-utils.readthedocs.io/)
-    background_color = db.Column(ColorType)
+    # background_color = db.Column(ColorType)
+    background_color = db.Column(db.String)
     created_at = db.Column(ArrowType, default=arrow.utcnow())
     user_id = db.Column(UUIDType(binary=False), db.ForeignKey(User.id))
 
