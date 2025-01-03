@@ -13,14 +13,19 @@ from markupsafe import Markup
 from flask_admin import Admin, form
 from flask_admin.theme import Bootstrap4Theme
 from flask_admin.form import rules
-from flask_admin.contrib import sqla, rediscli
-
+from flask_admin.theme import Bootstrap4Theme
+from flask_sqlalchemy import SQLAlchemy
+from markupsafe import Markup
+from redis import Redis
+from sqlalchemy.event import listens_for
+from wtforms import fields
+from wtforms import widgets
 
 # Create application
-app = Flask(__name__, static_folder='files')
+app = Flask(__name__, static_folder="files")
 
 # Create dummy secrey key so we can use sessions
-app.config['SECRET_KEY'] = '123456790'
+app.config["SECRET_KEY"] = "123456790"
 
 # Create in-memory database
 app.config['DATABASE_FILE'] = 'sample_db.sqlite'
@@ -30,7 +35,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Create directory for file fields to use
-file_path = op.join(op.dirname(__file__), 'files')
+file_path = op.join(op.dirname(__file__), "files")
 try:
     os.mkdir(file_path)
 except OSError:
@@ -123,7 +128,7 @@ class Page(db.Model):
 
 
 # Delete hooks for models, delete files if models are getting deleted
-@listens_for(File, 'after_delete')
+@listens_for(File, "after_delete")
 def del_file(mapper, connection, target):
     if target.path:
         try:
@@ -133,7 +138,7 @@ def del_file(mapper, connection, target):
             pass
 
 
-@listens_for(Image, 'after_delete')
+@listens_for(Image, "after_delete")
 def del_image(mapper, connection, target):
     if target.path:
         # Delete image
@@ -144,8 +149,7 @@ def del_image(mapper, connection, target):
 
         # Delete thumbnail
         try:
-            os.remove(op.join(file_path,
-                              form.thumbgen_filename(target.path)))
+            os.remove(op.join(file_path, form.thumbgen_filename(target.path)))
         except OSError:
             pass
 
@@ -155,9 +159,9 @@ def del_image(mapper, connection, target):
 class CKTextAreaWidget(widgets.TextArea):
     def __call__(self, field, **kwargs):
         # add WYSIWYG class to existing classes
-        existing_classes = kwargs.pop('class', '') or kwargs.pop('class_', '')
-        kwargs['class'] = '{} {}'.format(existing_classes, "ckeditor")
-        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
+        existing_classes = kwargs.pop("class", "") or kwargs.pop("class_", "")
+        kwargs["class"] = "{} {}".format(existing_classes, "ckeditor")
+        return super().__call__(field, **kwargs)
 
 
 class CKTextAreaField(fields.TextAreaField):
@@ -166,46 +170,40 @@ class CKTextAreaField(fields.TextAreaField):
 
 # Administrative views
 class PageView(sqla.ModelView):
-    form_overrides = {
-        'text': CKTextAreaField
-    }
-    create_template = 'create_page.html'
-    edit_template = 'edit_page.html'
+    form_overrides = {"text": CKTextAreaField}
+    create_template = "create_page.html"
+    edit_template = "edit_page.html"
+
 
 class FileView(sqla.ModelView):
     # Override form field to use Flask-Admin FileUploadField
-    form_overrides = {
-        'path': form.FileUploadField
-    }
+    form_overrides = {"path": form.FileUploadField}
 
     # Pass additional parameters to 'path' to FileUploadField constructor
     form_args = {
-        'path': {
-            'label': 'File',
-            'base_path': file_path,
-            'allow_overwrite': False
-        }
+        "path": {"label": "File", "base_path": file_path, "allow_overwrite": False}
     }
 
 
 class ImageView(sqla.ModelView):
     def _list_thumbnail(view, context, model, name):
         if not model.path:
-            return ''
+            return ""
 
-        return Markup('<img src="%s">' % url_for('static',
-                                                 filename=form.thumbgen_filename(model.path)))
+        return Markup(
+            '<img src="{}">'.format(
+                url_for("static", filename=form.thumbgen_filename(model.path))
+            )
+        )
 
-    column_formatters = {
-        'path': _list_thumbnail
-    }
+    column_formatters = {"path": _list_thumbnail}
 
     # Alternative way to contribute field is to override it completely.
     # In this case, Flask-Admin won't attempt to merge various parameters for the field.
     form_extra_fields = {
-        'path': form.ImageUploadField('Image',
-                                      base_path=file_path,
-                                      thumbnail_size=(100, 100, True))
+        "path": form.ImageUploadField(
+            "Image", base_path=file_path, thumbnail_size=(100, 100, True)
+        )
     }
 
 
@@ -250,8 +248,8 @@ class UserView(sqla.ModelView):
     # Use same rule set for edit page
     form_edit_rules = form_create_rules
 
-    create_template = 'create_user.html'
-    edit_template = 'edit_user.html'
+    create_template = "create_user.html"
+    edit_template = "edit_user.html"
 
     column_descriptions = {
         "is_admin": "Is this an admin user?",
@@ -281,12 +279,13 @@ class AddressView(sqla.ModelView):
     """Address records view"""
 
 # Flask views
-@app.route('/')
+@app.route("/")
 def index():
     return '<a href="/admin/">Click me to get to Admin!</a>'
 
+
 # Create admin
-admin = Admin(app, 'Example: Forms', theme=Bootstrap4Theme(swatch='cerulean'))
+admin = Admin(app, "Example: Forms", theme=Bootstrap4Theme(swatch="cerulean"))
 
 # Add views
 admin.add_view(FileView(File, db.session))
@@ -309,14 +308,58 @@ def build_sample_db():
     db.create_all()
 
     first_names = [
-        'Harry', 'Amelia', 'Oliver', 'Jack', 'Isabella', 'Charlie','Sophie', 'Mia',
-        'Jacob', 'Thomas', 'Emily', 'Lily', 'Ava', 'Isla', 'Alfie', 'Olivia', 'Jessica',
-        'Riley', 'William', 'James', 'Geoffrey', 'Lisa', 'Benjamin', 'Stacey', 'Lucy'
+        "Harry",
+        "Amelia",
+        "Oliver",
+        "Jack",
+        "Isabella",
+        "Charlie",
+        "Sophie",
+        "Mia",
+        "Jacob",
+        "Thomas",
+        "Emily",
+        "Lily",
+        "Ava",
+        "Isla",
+        "Alfie",
+        "Olivia",
+        "Jessica",
+        "Riley",
+        "William",
+        "James",
+        "Geoffrey",
+        "Lisa",
+        "Benjamin",
+        "Stacey",
+        "Lucy",
     ]
     last_names = [
-        'Brown', 'Smith', 'Patel', 'Jones', 'Williams', 'Johnson', 'Taylor', 'Thomas',
-        'Roberts', 'Khan', 'Lewis', 'Jackson', 'Clarke', 'James', 'Phillips', 'Wilson',
-        'Ali', 'Mason', 'Mitchell', 'Rose', 'Davis', 'Davies', 'Rodriguez', 'Cox', 'Alexander'
+        "Brown",
+        "Smith",
+        "Patel",
+        "Jones",
+        "Williams",
+        "Johnson",
+        "Taylor",
+        "Thomas",
+        "Roberts",
+        "Khan",
+        "Lewis",
+        "Jackson",
+        "Clarke",
+        "James",
+        "Phillips",
+        "Wilson",
+        "Ali",
+        "Mason",
+        "Mitchell",
+        "Rose",
+        "Davis",
+        "Davies",
+        "Rodriguez",
+        "Cox",
+        "Alexander",
     ]
     locations = [
         ("Shanghai", "China"),
@@ -344,14 +387,14 @@ def build_sample_db():
         ("Lagos", "Nigeria"),
         ("Lima", "Peru"),
         ("Ho Chi Minh City", "Vietnam"),
-        ]
+    ]
 
     for i in range(len(first_names)):
         user = User()
         user.first_name = first_names[i]
         user.last_name = last_names[i]
         user.email = user.first_name.lower() + "@example.com"
-        tmp = ''.join(random.choice(string.digits) for i in range(10))
+        tmp = "".join(random.choice(string.digits) for i in range(10))
         user.phone = "(" + tmp[0:3] + ") " + tmp[3:6] + " " + tmp[6::]
         user.city = locations[i][0]
         user.country = locations[i][1]
@@ -383,11 +426,11 @@ def build_sample_db():
     db.session.commit()
     return
 
-if __name__ == '__main__':
 
+if __name__ == "__main__":
     # Build a sample db on the fly, if one does not exist yet.
     app_dir = op.realpath(os.path.dirname(__file__))
-    database_path = op.join(app_dir, app.config['DATABASE_FILE'])
+    database_path = op.join(app_dir, app.config["DATABASE_FILE"])
     if not os.path.exists(database_path):
         with app.app_context():
             build_sample_db()

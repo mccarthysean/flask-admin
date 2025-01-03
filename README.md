@@ -1,6 +1,7 @@
 # Flask-Admin
 
-The project was recently moved into its own organization. Please update
+Flask-Admin is now part of Pallets-Eco, an open source organization managed by the
+Pallets team to facilitate community maintenance of Flask extensions. Please update
 your references to `https://github.com/pallets-eco/flask-admin.git`.
 
 [![image](https://d322cqt584bo4o.cloudfront.net/flask-admin/localized.svg)](https://crowdin.com/project/flask-admin) [![image](https://github.com/pallets-eco/flask-admin/actions/workflows/tests.yaml/badge.svg?branch=master)](https://github.com/pallets-eco/flask-admin/actions/workflows/test.yaml)
@@ -66,17 +67,26 @@ To run the examples in your local environment:
     python3 -m venv .venv
     source .venv/bin/activate
     ```
-3. Install requirements:
+
+3. Navigate into the SQLAlchemy example folder:
 
     ```bash
-    pip install -r examples/sqla/requirements.txt
+    cd examples/sqla
     ```
-4. Run the application:
+
+4. Install requirements:
 
     ```bash
-    python examples/sqla/run_server.py
+    pip install -r requirements.txt
     ```
-5. Check the Flask app running on <http://localhost:5000>.
+
+5. Run the application:
+
+    ```bash
+    python app.py
+    ```
+
+6. Check the Flask app running on <http://localhost:5000>.
 
 ## Documentation
 

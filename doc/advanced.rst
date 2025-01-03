@@ -162,14 +162,14 @@ can use it by adding a FileAdmin view to your app::
 
 
 FileAdmin also has out-of-the-box support for managing files located on a Amazon Simple Storage Service
-bucket. To add it to your app::
+bucket using a `boto3 client <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session.client>`_. To add it to your app::
 
     from flask_admin import Admin
     from flask_admin.contrib.fileadmin.s3 import S3FileAdmin
 
     admin = Admin()
 
-    admin.add_view(S3FileAdmin('files_bucket', 'us-east-1', 'key_id', 'secret_key')
+    admin.add_view(S3FileAdmin(boto3.client('s3'), 'files_bucket'))
 
 You can disable uploads, disable file deletion, restrict file uploads to certain types, etc.
 Check :mod:`flask_admin.contrib.fileadmin` in the API documentation for more details.
@@ -626,3 +626,13 @@ This targets SQLAlchemy specifically.
 Unlike the previous setting, this will specifically only affect the behaviour of
 IntegrityErrors. These usually come from violations on constraints in the database,
 for example trying to insert a row with a primary key that already exists.
+
+Adding a favicon to the admin page
+************************************
+Adding a favicon to flask-admin is easy: just save a .ico file and add a /favicon.ico
+route to your flask app.
+
+    from flask import redirect, url_for
+    @app.route("/favicon.ico")
+    def favicon():
+        return redirect(url_for("static", filename="favicon.ico"))

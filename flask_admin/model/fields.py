@@ -1,61 +1,64 @@
 import itertools
 
-from wtforms.validators import ValidationError
-from wtforms.fields import FieldList, FormField, SelectFieldBase, TextAreaField
+from wtforms.fields import FieldList
+from wtforms.fields import FormField
+from wtforms.fields import SelectFieldBase
 from wtforms.utils import unset_value
+from wtforms.validators import ValidationError
 from wtforms.widgets import Input
+from wtforms.fields import TextAreaField
 
 from flask_admin._compat import iteritems
-from .widgets import (InlineFieldListWidget, InlineFormWidget,
-                      AjaxSelect2Widget)
+
+from .widgets import AjaxSelect2Widget
+from .widgets import InlineFieldListWidget
+from .widgets import InlineFormWidget
 
 
 class InlineFieldList(FieldList):
     widget = InlineFieldListWidget()
 
     def __init__(self, *args, **kwargs):
-        super(InlineFieldList, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __call__(self, **kwargs):
         # Create template
-        meta = getattr(self, 'meta', None)
+        meta = getattr(self, "meta", None)
         if meta:
-            template = self.unbound_field.bind(form=None, name='', _meta=meta)
+            template = self.unbound_field.bind(form=None, name="", _meta=meta)
         else:
-            template = self.unbound_field.bind(form=None, name='')
+            template = self.unbound_field.bind(form=None, name="")
         # Small hack to remove separator from FormField
         if isinstance(template, FormField):
-            template.separator = ''
+            template.separator = ""
 
         template.process(None)
 
-        return self.widget(self,
-                           template=template,
-                           check=self.display_row_controls,
-                           **kwargs)
+        return self.widget(
+            self, template=template, check=self.display_row_controls, **kwargs
+        )
 
     def display_row_controls(self, field):
         return True
 
     def process(self, formdata, data=unset_value, extra_filters=None):
-        res = super(InlineFieldList, self).process(
-            formdata, data)
+        res = super().process(formdata, data)
 
         # Postprocess - contribute flag
         if formdata:
             for f in self.entries:
-                key = 'del-%s' % f.id
+                key = f"del-{f.id}"
                 f._should_delete = key in formdata
 
         return res
 
     def validate(self, form, extra_validators=tuple()):
         """
-            Validate this FieldList.
+        Validate this FieldList.
 
-            Note that FieldList validation differs from normal field validation in
-            that FieldList validates all its enclosed fields first before running any
-            of its own validators.
+        Note that FieldList validation differs from normal field validation in
+        that FieldList validates all its enclosed fields first before running any
+        of its own validators.
         """
         self.errors = []
 
@@ -70,7 +73,7 @@ class InlineFieldList(FieldList):
         return len(self.errors) == 0
 
     def should_delete(self, field):
-        return getattr(field, '_should_delete', False)
+        return getattr(field, "_should_delete", False)
 
     def populate_obj(self, obj, name):
         values = getattr(obj, name, None)
@@ -80,14 +83,14 @@ class InlineFieldList(FieldList):
             ivalues = iter([])
 
         candidates = itertools.chain(ivalues, itertools.repeat(None))
-        _fake = type(str('_fake'), (object, ), {})
+        _fake = type("_fake", (object,), {})
 
         output = []
         for field, data in zip(self.entries, candidates):
             if not self.should_delete(field):
                 fake_obj = _fake()
                 fake_obj.data = data
-                field.populate_obj(fake_obj, 'data')
+                field.populate_obj(fake_obj, "data")
                 output.append(fake_obj.data)
 
         setattr(obj, name, output)
@@ -95,40 +98,31 @@ class InlineFieldList(FieldList):
 
 class InlineFormField(FormField):
     """
-        Inline version of the ``FormField`` widget.
+    Inline version of the ``FormField`` widget.
     """
+
     widget = InlineFormWidget()
 
 
 class InlineModelFormField(FormField):
     """
-        Customized ``FormField``.
+    Customized ``FormField``.
 
-        Excludes model primary key from the `populate_obj` and
-        handles `should_delete` flag.
+    Excludes model primary key from the `populate_obj` and
+    handles `should_delete` flag.
     """
+
     widget = InlineFormWidget()
 
     def __init__(self, form_class, pk, form_opts=None, **kwargs):
-        super(InlineModelFormField, self).__init__(form_class, **kwargs)
+        super().__init__(form_class, **kwargs)
 
         self._pk = pk
         self.form_opts = form_opts
 
     def get_pk(self):
-        """Get the primary key value from the form"""
-        try:
-            if isinstance(self._pk, (tuple, list)):
-                return tuple(getattr(self.form, pk).data for pk in self._pk)
-
-            return getattr(self.form, self._pk).data
-        except AttributeError:
-            if self._pk not in self.form:
-                raise AttributeError(
-                    'Primary key field "%s" is required in inline_models "form_columns". Available form fields: %s'
-                    % (self._pk, self.form._fields.keys())
-                )
-            raise
+        if isinstance(self._pk, (tuple, list)):
+            return tuple(getattr(self.form, pk).data for pk in self._pk)
 
 
     def populate_obj(self, obj, name):
@@ -139,14 +133,23 @@ class InlineModelFormField(FormField):
 
 class AjaxSelectField(SelectFieldBase):
     """
-        Ajax Model Select Field
+    Ajax Model Select Field
     """
+
     widget = AjaxSelect2Widget()
 
-    separator = ','
+    separator = ","
 
-    def __init__(self, loader, label=None, validators=None, allow_blank=False, blank_text=u'', **kwargs):
-        super(AjaxSelectField, self).__init__(label, validators, **kwargs)
+    def __init__(
+        self,
+        loader,
+        label=None,
+        validators=None,
+        allow_blank=False,
+        blank_text="",
+        **kwargs,
+    ):
+        super().__init__(label, validators, **kwargs)
         self.loader = loader
 
         self.allow_blank = allow_blank
@@ -173,7 +176,7 @@ class AjaxSelectField(SelectFieldBase):
 
     def process_formdata(self, valuelist):
         if valuelist:
-            if self.allow_blank and valuelist[0] == u'__None':
+            if self.allow_blank and valuelist[0] == "__None":
                 self.data = None
             else:
                 self._data = None
@@ -181,20 +184,21 @@ class AjaxSelectField(SelectFieldBase):
 
     def pre_validate(self, form):
         if not self.allow_blank and self.data is None:
-            raise ValidationError(self.gettext(u'Not a valid choice'))
+            raise ValidationError(self.gettext("Not a valid choice"))
 
 
 class AjaxSelectMultipleField(AjaxSelectField):
     """
-        Ajax-enabled model multi-select field.
+    Ajax-enabled model multi-select field.
     """
+
     widget = AjaxSelect2Widget(multiple=True)
 
     def __init__(self, loader, label=None, validators=None, default=None, **kwargs):
         if default is None:
             default = []
 
-        super(AjaxSelectMultipleField, self).__init__(loader, label, validators, default=default, **kwargs)
+        super().__init__(loader, label, validators, default=default, **kwargs)
         self._invalid_formdata = False
 
     def _get_data(self):
