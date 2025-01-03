@@ -9,25 +9,21 @@ cd "$(dirname "$0")"
 # cd ..
 echo "Current working directory: $(pwd)"
 
-# Remove unused imports and unused variables
+# Use Ruff to lint everything
 echo ""
-echo "Running autoflake..."
-autoflake --in-place --remove-unused-variables --remove-all-unused-imports --verbose --recursive ../flask_admin
-autoflake --in-place --remove-unused-variables --remove-all-unused-imports --verbose --recursive ../flask_admin/tests
+echo "Running ruff linter..."
+# Run the linter
+ruff check ../flask_admin --fix --config ../pyproject.toml
+ruff check ../flask_admin/tests --fix --config ../pyproject.toml
 
+# Run the formatter
 echo ""
-echo "Running autopep8 to remove whitespace (NOTE this doesn't change multi-line strings!)..."
-autopep8 --in-place --recursive --exclude="*/migrations/*" --select="W291,W293" ../flask_admin
-autopep8 --in-place --recursive --exclude="*/migrations/*" --select="W291,W293" ../flask_admin/tests
+echo "Running ruff formatter..."
+ruff format ../flask_admin --config ../pyproject.toml
+ruff format ../flask_admin/tests --config ../pyproject.toml
 
-# Opinionated but lovely auto-formatting
-echo ""
-echo "Running black..."
-black ../flask_admin
-black ../flask_admin/tests
-
-# Nice sorting of imports
-echo ""
-echo "Running isort..."
-isort --profile black ../flask_admin
-isort --profile black ../flask_admin/tests
+# # Run the pyright linter (takes a bit longer)
+# echo ""
+# echo "Running pyright linter..."
+# pyright ../flask_admin --project ../pyproject.toml
+# pyright ../flask_admin/tests --project ../pyproject.toml

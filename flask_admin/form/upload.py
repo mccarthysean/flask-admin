@@ -3,7 +3,6 @@ import base64
 import os
 import os.path as op
 from types import ModuleType
-from typing import Optional
 from urllib.parse import urljoin
 
 from markupsafe import Markup
@@ -19,8 +18,8 @@ from flask_admin._compat import string_types
 from flask_admin.babel import gettext
 from flask_admin.helpers import get_url
 
-Image: Optional[ModuleType]
-ImageOps: Optional[ModuleType]
+Image: ModuleType | None
+ImageOps: ModuleType | None
 
 
 try:
@@ -679,7 +678,7 @@ class ImageUploadFieldDB(FileUploadField):
         try:
             self.image = Image.open(self.data)
         except Exception as e:
-            raise ValidationError("Invalid image: %s" % e)
+            raise ValidationError(f"Invalid image: {e}")
 
     def pre_validate(self, form):
         super().pre_validate(form)
@@ -688,7 +687,7 @@ class ImageUploadFieldDB(FileUploadField):
             try:
                 self.image = Image.open(self.data)
             except Exception as e:
-                raise ValidationError("Invalid image: %s" % e)
+                raise ValidationError(f"Invalid image: {e}")
 
     @staticmethod
     def image_to_bytes(image: Image, format: str) -> bytes:
@@ -734,7 +733,7 @@ class ImageUploadFieldDB(FileUploadField):
         setattr(obj, name, image_bytes)
         # Also set the format
         if hasattr(obj, "format"):
-            setattr(obj, "format", image.format)
+            obj.format = image.format
 
     @staticmethod
     def resize(image: Image, width: int, height: int, force: bool) -> Image:

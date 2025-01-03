@@ -245,7 +245,7 @@ class ModelView(BaseModelView):
                     p = getattr(self.model, p)
 
                 # Check type
-                if not isinstance(p, (CharField, TextField)):
+                if not isinstance(p, CharField | TextField):
                     raise Exception(
                         f"Can only search on text columns. "
                         f'Failed to setup search for "{p}"'
@@ -486,7 +486,7 @@ class ModelView(BaseModelView):
     def get_one(self, id):
         if self.model._meta.composite_key:
             return self.model.get(
-                **dict(zip(self.model._meta.primary_key.field_names, id))
+                **dict(zip(self.model._meta.primary_key.field_names, id, strict=False))
             )
         return self.model.get(**{self._primary_key: id})
 

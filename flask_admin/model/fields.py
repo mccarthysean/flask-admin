@@ -86,7 +86,7 @@ class InlineFieldList(FieldList):
         _fake = type("_fake", (object,), {})
 
         output = []
-        for field, data in zip(self.entries, candidates):
+        for field, data in zip(self.entries, candidates, strict=False):
             if not self.should_delete(field):
                 fake_obj = _fake()
                 fake_obj.data = data
@@ -121,7 +121,7 @@ class InlineModelFormField(FormField):
         self.form_opts = form_opts
 
     def get_pk(self):
-        if isinstance(self._pk, (tuple, list)):
+        if isinstance(self._pk, tuple | list):
             return tuple(getattr(self.form, pk).data for pk in self._pk)
 
 
@@ -234,7 +234,7 @@ class AjaxSelectMultipleField(AjaxSelectField):
 
     def pre_validate(self, form):
         if self._invalid_formdata:
-            raise ValidationError(self.gettext(u'Not a valid choice'))
+            raise ValidationError(self.gettext('Not a valid choice'))
 
 
 class ColorField(TextAreaField):

@@ -241,7 +241,7 @@ class InlineModelConverter(InlineModelConverterBase):
                 new_name = f"{info.model.__name__.lower()}.{name}"
 
                 loader = None
-                if isinstance(opts, (list, tuple)):
+                if isinstance(opts, list | tuple):
                     loader = create_ajax_loader(info.model, new_name, name, opts)
                 else:
                     loader = opts

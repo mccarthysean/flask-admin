@@ -239,7 +239,7 @@ class Select2TagsField(fields.StringField):
                 self.data = self.coerce(entrylist)
 
     def _value(self):
-        if isinstance(self.data, (list, tuple)):
+        if isinstance(self.data, list | tuple):
             return ",".join(as_unicode(v) for v in self.data)
         elif self.data:
             return as_unicode(self.data)

@@ -228,7 +228,7 @@ def is_hybrid_property(model, attr_name):
                 last_model = attr.property._clsregistry_resolve_name(last_model)()
             elif isinstance(last_model, _class_resolver):
                 last_model = model._decl_class_registry[last_model.arg]
-            elif isinstance(last_model, (types.FunctionType, types.MethodType)):
+            elif isinstance(last_model, types.FunctionType | types.MethodType):
                 last_model = last_model()
         last_name = names[-1]
         return last_name in get_hybrid_properties(last_model)

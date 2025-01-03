@@ -2,7 +2,6 @@ import inspect
 import logging
 import warnings
 from typing import cast as t_cast
-from typing import Optional
 
 from flask import current_app
 from flask import flash
@@ -282,7 +281,7 @@ class ModelView(BaseModelView):
 
     column_type_formatters = DEFAULT_FORMATTERS
 
-    form_choices: Optional[dict[str, list[tuple[str, str]]]] = None
+    form_choices: dict[str, list[tuple[str, str]]] | None = None
     """
         Map choices to form fields
 
@@ -983,7 +982,7 @@ class ModelView(BaseModelView):
                 sort_joins = self._sortable_joins.get(sort_column)
 
                 if isinstance(sort_field, list):
-                    for field_item, join_item in zip(sort_field, sort_joins):
+                    for field_item, join_item in zip(sort_field, sort_joins, strict=False):
                         query, joins = self._order_by(
                             query, joins, join_item, field_item, sort_desc
                         )

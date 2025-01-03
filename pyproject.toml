@@ -8,7 +8,6 @@ packages = [
 ]
 
 readme = "README.md"
-author = [{ name = "Flask-Admin team" }]
 classifiers = [
     'Development Status :: 4 - Beta',
     'Environment :: Web Environment',
@@ -22,12 +21,13 @@ classifiers = [
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
 ]
-requires-python = ">=3.9"
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.8.3"]
 build-backend = "poetry.masonry.api"
 
+[tool.poetry.dependencies]
+python = ">=3.7"
 
 [tool.poetry.dev-dependencies]
 Flask = "^2.1.2"
@@ -56,29 +56,6 @@ sqlalchemy-citext = "^1.8.0"
 azure-storage-blob = "^12.12.0"
 colour = "^0.1.5"
 email-validator = "^1.2.1"
-[tool.pytest.ini_options]
-testpaths = ["flask_admin/tests"]
-markers = [
-    "flask_babel: requires Flask-Babel to be installed"
-]
-filterwarnings = [
-    "error",
-    # TODO: remove the ignored deprecation warning when support for WTForms 3 has been added.
-    "ignore:Flags should be stored in dicts and not in tuples. The next version of WTForms will abandon support for flags in tuples.:DeprecationWarning",
-
-    # Werkzeug is responsible for the below deprecation warning; remove when they have updated their code.
-    "default:ast\\.Str is deprecated and will be removed in Python 3\\.14:DeprecationWarning",
-    "default:Attribute s is deprecated and will be removed in Python 3\\.14:DeprecationWarning",
-
-    # Flask is responsible for the below deprecation warning; remove when they have updated their code.
-    "default:'pkgutil\\.get_loader' is deprecated and slated for removal in Python 3\\.14:DeprecationWarning",
-    "default:'pkgutil\\.find_loader' is deprecated and slated for removal in Python 3\\.14:DeprecationWarning",
-
-    "default:datetime\\.datetime\\.utcnow\\(\\) is deprecated and scheduled for removal in a future version:DeprecationWarning",
-
-    # `flask.testing` accesses this attribute; remove when they have updated their code.
-    "default:The '__version__' attribute is deprecated and will be removed in Werkzeug 3\\.1\\.:DeprecationWarning",
-]
 
 [tool.coverage.run]
 branch = true
@@ -135,16 +112,56 @@ module = [
 ]
 ignore_missing_imports = true
 
-[tool.pyright]
-pythonVersion = "3.9"
-include = ["flask_admin", "tests"]
-typeCheckingMode = "basic"
+[tool.ruff.lint.isort]
+force-single-line = true
+order-by-type = false
+
 
 [tool.ruff]
 src = ["flask_admin"]
 fix = true
 show-fixes = true
 output-format = "full"
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Assume Python 3.11
+target-version = "py311"
+
+# Enable application of unsafe fixes. If excluded, a hint will be displayed when unsafe fixes are available.
+# If set to false, the hint will be hidden.
+unsafe-fixes = true
 
 [tool.ruff.lint]
 select = [
@@ -156,7 +173,114 @@ select = [
     "W",  # pycodestyle warning
 ]
 ignore-init-module-imports = true
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+# select = ["E4", "E7", "E9", "F", "I001"]
+# Ignore `E402` (import violations)
+ignore = ["E402", "I001"]
 
-[tool.ruff.lint.isort]
-force-single-line = true
-order-by-type = false
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+# Disable fix for unused imports (`F401`).
+# unfixable = ["F401"]
+unfixable = []
+
+# Avoid automatically removing unused imports in __init__.py files
+# The `ignore-init-module-imports` option is deprecated and will be removed in a future release.
+# Ruff's handling of imports in `__init__.py` files has been improved (in preview) and unused imports will always be flagged.
+# ignore-init-module-imports = false
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = true
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
+[tool.pyright]
+pythonVersion = "3.9"
+include = ["flask_admin", "tests"]
+typeCheckingMode = "basic"
+# venvPath = "/usr/local"
+# venv = ".venv"
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+]
+# strict = ["app"]
+verboseOutput = true
+pythonPlatform = "Linux"
+extraPaths = ["/workspace/.venv/lib/python3.12/site-packages"]
+
+reportUnboundVariable = "error"
+reportArgumentType = "none"
+reportReturnType = "none"
+reportGeneralTypeIssues = "none"
+reportAttributeAccessIssue = "none"
+reportIndexIssue = "none"
+reportCallIssue = "none"
+reportAssignmentType = "none"
+reportIncompatibleMethodOverride = "none"
+reportOptionalMemberAccess = "none"
+
+[tool.pytest.ini_options]
+testpaths = ["flask_admin/tests"]
+markers = [
+    "flask_babel: requires Flask-Babel to be installed",
+    'unit: Quick running unit tests which test small units of functionality.',
+    'functional: Slower running tests which test the entire system is functioning.',
+]
+filterwarnings = [
+    "error",
+    # TODO: remove the ignored deprecation warning when support for WTForms 3 has been added.
+    "ignore:Flags should be stored in dicts and not in tuples. The next version of WTForms will abandon support for flags in tuples.:DeprecationWarning",
+
+    # Werkzeug is responsible for the below deprecation warning; remove when they have updated their code.
+    "default:ast\\.Str is deprecated and will be removed in Python 3\\.14:DeprecationWarning",
+    "default:Attribute s is deprecated and will be removed in Python 3\\.14:DeprecationWarning",
+
+    # Flask is responsible for the below deprecation warning; remove when they have updated their code.
+    "default:'pkgutil\\.get_loader' is deprecated and slated for removal in Python 3\\.14:DeprecationWarning",
+    "default:'pkgutil\\.find_loader' is deprecated and slated for removal in Python 3\\.14:DeprecationWarning",
+
+    "default:datetime\\.datetime\\.utcnow\\(\\) is deprecated and scheduled for removal in a future version:DeprecationWarning",
+
+    # `flask.testing` accesses this attribute; remove when they have updated their code.
+    "default:The '__version__' attribute is deprecated and will be removed in Werkzeug 3\\.1\\.:DeprecationWarning",
+    'ignore::warehouse.packaging.services.InsecureStorageWarning',
+]
+norecursedirs = ['build', 'dist', 'node_modules', '*.egg-info', '.state requirements']
+
+[tool.curlylint]
+# For jinja's i18n extension:
+template_tags = [['trans', 'pluralize', 'endtrans']]
+
+[tool.curlylint.rules]
+indent = 2
+html_has_lang = 'en-US'
+image_alt = true
+aria_role = true

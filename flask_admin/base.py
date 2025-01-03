@@ -533,10 +533,10 @@ class Admin:
         translations_path=None,
         endpoint=None,
         static_url_path=None,
-        theme: t.Optional[Theme] = None,
+        theme: Theme | None = None,
         category_icon_classes=None,
         host=None,
-        csp_nonce_generator: t.Optional[t.Callable] = None,
+        csp_nonce_generator: t.Callable | None = None,
     ):
         """
         Constructor.

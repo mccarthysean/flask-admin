@@ -30,12 +30,9 @@ from flask_admin.babel import lazy_gettext
 from flask_admin.base import BaseView
 from flask_admin.base import expose
 
-if sys.version_info >= (3, 11):
-    from datetime import UTC
+from datetime import UTC
 
-    utc_fromtimestamp = partial(datetime.fromtimestamp, tz=UTC)
-else:
-    utc_fromtimestamp = datetime.utcfromtimestamp
+utc_fromtimestamp = partial(datetime.fromtimestamp, tz=UTC)
 
 
 class LocalFileStorage:

@@ -50,7 +50,7 @@ class _BlueprintWithHostSupport(FlaskBlueprint):
         # required by any of them.
         @self.url_value_preprocessor
         def strip_admin_routes_host_from_static_endpoint(
-            endpoint: t.Optional[str], values: t.Optional[dict[str, t.Any]]
+            endpoint: str | None, values: dict[str, t.Any] | None
         ) -> None:
             if (
                 endpoint

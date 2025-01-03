@@ -7,7 +7,6 @@ import warnings
 from collections import OrderedDict
 from math import ceil
 from typing import cast
-from typing import Optional
 
 from flask import abort
 from flask import current_app
@@ -211,7 +210,7 @@ class BaseModelView(BaseView, ActionsMixin):
     """Setting this to true will display the details_view as a modal dialog."""
 
     # Customizations
-    column_list: Optional[T_COLUMN_LIST] = cast(
+    column_list: T_COLUMN_LIST | None = cast(
         None, ObsoleteAttr("column_list", "list_columns", None)
     )
     """
@@ -233,7 +232,7 @@ class BaseModelView(BaseView, ActionsMixin):
                 column_list = ('<relationship>.<related column name>',)
     """
 
-    column_exclude_list: Optional[T_COLUMN_LIST] = cast(
+    column_exclude_list: T_COLUMN_LIST | None = cast(
         None, ObsoleteAttr("column_exclude_list", "excluded_list_columns", None)
     )
     """
@@ -319,7 +318,7 @@ class BaseModelView(BaseView, ActionsMixin):
         that macros are not supported.
     """
 
-    column_type_formatters: Optional[T_FORMATTERS] = cast(
+    column_type_formatters: T_FORMATTERS | None = cast(
         None, ObsoleteAttr("column_type_formatters", "list_type_formatters", None)
     )
     """
@@ -412,7 +411,7 @@ class BaseModelView(BaseView, ActionsMixin):
                 )
     """
 
-    column_sortable_list: Optional[T_COLUMN_LIST] = cast(
+    column_sortable_list: T_COLUMN_LIST | None = cast(
         None,
         ObsoleteAttr("column_sortable_list", "sortable_columns", None),
     )
@@ -466,7 +465,7 @@ class BaseModelView(BaseView, ActionsMixin):
                 column_default_sort = [('name', True), ('last_name', True)]
     """
 
-    column_searchable_list: Optional[T_COLUMN_LIST] = cast(
+    column_searchable_list: T_COLUMN_LIST | None = cast(
         None,
         ObsoleteAttr("column_searchable_list", "searchable_columns", None),
     )
@@ -576,7 +575,7 @@ class BaseModelView(BaseView, ActionsMixin):
         prev/next pager buttons.
     """
 
-    form: Optional[type[Form]] = None
+    form: type[Form] | None = None
     """
         Form class. Override if you want to use custom form for your model.
         Will completely disable form scaffolding functionality.

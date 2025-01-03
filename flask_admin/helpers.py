@@ -61,7 +61,7 @@ def is_required_form_field(field):
     from flask_admin.form.validators import FieldListInputRequired
 
     for validator in field.validators:
-        if isinstance(validator, (DataRequired, InputRequired, FieldListInputRequired)):
+        if isinstance(validator, DataRequired | InputRequired | FieldListInputRequired):
             return True
     return False
 
@@ -102,7 +102,7 @@ def is_field_error(errors):
     :param errors:
         Errors list.
     """
-    if isinstance(errors, (list, tuple)):
+    if isinstance(errors, list | tuple):
         for e in errors:
             if isinstance(e, string_types):
                 return True

@@ -396,11 +396,11 @@ class Row(NestedRule):
                     Space-separated classes to use for the Bootstrap columns (e.g. "col-md-6").
                     Default "col"
         """
-        super(Row, self).__init__(rules=columns, separator="")
+        super().__init__(rules=columns, separator="")
         self.row_classes = kw.get("row_classes", "form-row")
         self.col_classes = kw.get("col_classes", "col")
 
-    def __call__(self, form, form_opts=None, field_args={}):
+    def __call__(self, form, form_opts=None, field_args=None):
         """
         Render all children when called in the Jinja template.
 
@@ -411,6 +411,8 @@ class Row(NestedRule):
         :param field_args:
             Optional arguments that should be passed to template or the field
         """
+        if field_args is None:
+            field_args = {}
         cols = []
         for col in self.rules:
             if col.visible_fields:
@@ -418,7 +420,7 @@ class Row(NestedRule):
                 w_args.setdefault("column_class", self.col_classes)
             cols.append(col(form, form_opts, field_args))
 
-        return Markup('<div class="%s">%s</div>' % (self.row_classes, "".join(cols)))
+        return Markup('<div class="{}">{}</div>'.format(self.row_classes, "".join(cols)))
 
 
 class NestedRuleClasses(NestedRule):
@@ -428,7 +430,7 @@ class NestedRuleClasses(NestedRule):
         For example, to make a Bootstrap container div:
             NestedRuleClasses(rules=["field1", "field2"], classes="container")
     """
-    def __init__(self, rules=[], separator="", classes=""):
+    def __init__(self, rules=None, separator="", classes=""):
         """
             Constructor
 
@@ -439,10 +441,12 @@ class NestedRuleClasses(NestedRule):
             :param classes:
                 Space-separated classes to use (e.g. "container", "row", or "col")
         """
-        super(NestedRuleClasses, self).__init__(rules=rules, separator=separator)
+        if rules is None:
+            rules = []
+        super().__init__(rules=rules, separator=separator)
         self.classes = classes
 
-    def __call__(self, form, form_opts=None, field_args={}):
+    def __call__(self, form, form_opts=None, field_args=None):
         """
         Render all children.
 
@@ -453,6 +457,8 @@ class NestedRuleClasses(NestedRule):
         :param field_args:
             Optional arguments that should be passed to template or the field
         """
+        if field_args is None:
+            field_args = {}
         result = []
         for rule in self.rules:
             # if rule.visible_fields:
@@ -461,14 +467,14 @@ class NestedRuleClasses(NestedRule):
             result.append(rule(form, form_opts, field_args))
 
         children = self.separator.join(result)
-        return Markup('<div class="%s">%s</div>' % (self.classes, children))
+        return Markup(f'<div class="{self.classes}">{children}</div>')
 
 
 class BSContainer(NestedRuleClasses):
     """
         Bootstrap container, which should have Bootstrap rows and columns nested inside.
     """
-    def __init__(self, rules=[], separator="", classes=""):
+    def __init__(self, rules=None, separator="", classes=""):
         """
             Constructor
 
@@ -480,15 +486,17 @@ class BSContainer(NestedRuleClasses):
                 Space-separated classes to add to the default "container" class.
                 Try something like classes="container-fluid" to make a full-width container.
         """
-        classes = "container {}".format(classes)
-        super(BSContainer, self).__init__(rules=rules, separator=separator, classes=classes)
+        if rules is None:
+            rules = []
+        classes = f"container {classes}"
+        super().__init__(rules=rules, separator=separator, classes=classes)
 
 
 class BSRow(NestedRuleClasses):
     """
         Bootstrap row, which should have Bootstrap columns nested inside.
     """
-    def __init__(self, rules=[], separator="", classes=""):
+    def __init__(self, rules=None, separator="", classes=""):
         """
             Constructor
 
@@ -500,7 +508,9 @@ class BSRow(NestedRuleClasses):
                 Space-separated classes to add to the default "form-row" class.
                 Try something like classes="justify-content-center" to center your columns in the row.
         """
-        classes = "form-row {}".format(classes)
+        if rules is None:
+            rules = []
+        classes = f"form-row {classes}"
 
         # Ensure the children in a Bootstrap row are BSCol classes
         columns = []
@@ -509,14 +519,14 @@ class BSRow(NestedRuleClasses):
                 rule = BSCol(rules=[rule])
             columns.append(rule)
 
-        super(BSRow, self).__init__(rules=columns, separator=separator, classes=classes)
+        super().__init__(rules=columns, separator=separator, classes=classes)
 
 
 class BSCol(NestedRuleClasses):
     """
         Bootstrap column, which can have another rule nested inside.
     """
-    def __init__(self, rules=[], separator="", classes=""):
+    def __init__(self, rules=None, separator="", classes=""):
         """
             Constructor
 
@@ -529,8 +539,10 @@ class BSCol(NestedRuleClasses):
                 Try something like classes="col-md-3" to have the column fill 1/4
                 of the screen if it's at least a medium-sized device.
         """
-        classes = "col {}".format(classes)
-        super(BSCol, self).__init__(rules=rules, separator=separator, classes=classes)
+        if rules is None:
+            rules = []
+        classes = f"col {classes}"
+        super().__init__(rules=rules, separator=separator, classes=classes)
 
 
 class Group(Macro):
@@ -544,7 +556,7 @@ class Group(Macro):
         self._addons = []
 
         if prepend:
-            if not isinstance(prepend, (tuple, list)):
+            if not isinstance(prepend, tuple | list):
                 prepend = [prepend]
 
             for cnf in prepend:
@@ -557,7 +569,7 @@ class Group(Macro):
                     self._addons.append(cnf)
 
         if append:
-            if not isinstance(append, (tuple, list)):
+            if not isinstance(append, tuple | list):
                 append = [append]
 
             for cnf in append:
@@ -691,7 +703,7 @@ class RuleSet:
         for r in rules:
             if isinstance(r, string_types):
                 result.append(self.convert_string(r).configure(self, parent))
-            elif isinstance(r, (tuple, list)):
+            elif isinstance(r, tuple | list):
                 row = Row(*r)
                 result.append(row.configure(self, parent))
             else:
