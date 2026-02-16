@@ -35,6 +35,10 @@
   // Uncomment the next line to use a non-root user. See https://aka.ms/vscode-remote/containers/non-root-user.
   // "runArgs": [ "-u", "1000" ],
   // "runArgs": ["-u", "vscode"],
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.claude-docker 2>/dev/null || true",
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.claude-docker,target=/root/.claude,type=bind"
+  ],
   "customizations": {
     "vscode": {
       "settings": {
